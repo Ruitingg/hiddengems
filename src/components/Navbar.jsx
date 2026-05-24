@@ -53,7 +53,7 @@ const Navbar = () => {
         <span className="text-2xl">💎</span>
         <span className="text-white font-bold text-xl"
                 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-            HiddenGems SG
+            HiddenGems
         </span>
         </Link>
 
