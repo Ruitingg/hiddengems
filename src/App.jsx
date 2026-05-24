@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import DiscoveryPage from './pages/DiscoveryPage'
 import AuthPage from './components/AuthPage'
 import ProfilePage from './pages/ProfilePage'
+import DashboardPage from './pages/DashboardPage'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<DiscoveryPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
     </Router>
   )
