@@ -2,9 +2,14 @@ import { useState, useEffect } from 'react'
 import HBBCard from '../components/HBBCard'
 import { supabase } from '../lib/supabaseClient'
 
+const categories = ['All', 'Food', 'Beauty', 'Crafts']
+const areas = ['All Areas', 'Tampines', 'Bishan', 'Jurong West', 'Ang Mo Kio', 'Clementi', 'Tiong Bahru']
+
 const DiscoveryPage = () => {
     const [hbbs, setHbbs] = useState([])
     const [loading, setLoading] = useState(true)
+    const [activeCategory, setActiveCategory] = useState('All')
+    const [activeArea, setActiveArea] = useState('All Areas')
 
     useEffect(() => {
     const fetchHBBs = async () => {
@@ -23,6 +28,13 @@ const DiscoveryPage = () => {
     fetchHBBs()
     }, [])
 
+  // Filter logic
+    const filteredHBBs = hbbs.filter((hbb) => {
+    const categoryMatch = activeCategory === 'All' || hbb.category === activeCategory
+    const areaMatch = activeArea === 'All Areas' || hbb.area === activeArea
+    return categoryMatch && areaMatch
+    })
+
     if (loading) {
     return (
         <div className="min-h-screen bg-[#ede1d2] flex items-center justify-center">
@@ -39,11 +51,50 @@ const DiscoveryPage = () => {
         Discover Hidden Gems 💎
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {hbbs.map((hbb) => (
-            <HBBCard key={hbb.id} hbb={hbb} />
+      {/* Category filter buttons */}
+        <div className="flex gap-2 mb-4 flex-wrap">
+        {categories.map((cat) => (
+            <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                activeCategory === cat
+                ? 'bg-[#184b44] text-white'
+                : 'bg-white text-[#184b44] border border-[#184b44]'
+            }`}
+            >
+            {cat}
+            </button>
         ))}
         </div>
+
+      {/* Area dropdown */}
+        <div className="mb-6 relative inline-block">
+        <select
+        value={activeArea}
+        onChange={(e) => setActiveArea(e.target.value)}
+        className="appearance-none bg-white text-[#184b44] border border-[#184b44] rounded-full px-4 py-2 pr-8 text-sm font-medium"
+        >
+
+        {areas.map((area) => (
+        <option key={area} value={area}>{area}</option>
+        ))}
+        </select>
+        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#184b44] text-xs">▼</span>
+        </div>
+
+      {/* Empty state */}
+        {filteredHBBs.length === 0 ? (
+        <p className="text-[#184b44] text-center mt-10">
+            No HBBs found in this category and area. Try a different filter.
+        </p>
+        ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredHBBs.map((hbb) => (
+            <HBBCard key={hbb.id} hbb={hbb} />
+            ))}
+        </div>
+        )}
 
     </div>
     )
