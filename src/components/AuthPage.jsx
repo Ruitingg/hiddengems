@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import DiamondIcon from '../components/DiamondIcon'
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true)
@@ -30,7 +31,6 @@ const AuthPage = () => {
                 .select('role')
                 .eq('id', data.user.id)
                 .single()
-
             if (userData?.role === 'owner') {
                 navigate('/dashboard')
             } else {
@@ -42,11 +42,7 @@ const AuthPage = () => {
                 setError(error.message)
                 return
             }
-            await supabase.from('users').insert({
-                id: data.user.id,
-                email,
-                role
-            })
+            await supabase.from('users').insert({ id: data.user.id, email, role })
             if (role === 'owner') {
                 navigate('/dashboard')
             } else {
@@ -56,13 +52,14 @@ const AuthPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-
-            {/* Top branding */}
+        <div className="min-h-screen bg-white flex items-center justify-center px-4">
             <div className="w-full max-w-md">
+
                 <div className="text-center mb-8">
-                    <span className="text-4xl">💎</span>
-                    <h1 className="text-2xl font-bold text-[#184b44] mt-2"
+                    <div className="flex justify-center mb-3">
+                        <DiamondIcon size={50} color="#0e6b7a" />
+                    </div>
+                    <h1 className="text-2xl font-bold text-[#2d3748]"
                         style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                         HiddenGems
                     </h1>
@@ -71,25 +68,24 @@ const AuthPage = () => {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
 
-                    {/* Toggle */}
-                    <div className="flex mb-6 bg-gray-100 rounded-full p-1">
+                    <div className="flex mb-6 bg-[#FAFEFE] rounded-full p-1 border border-gray-100">
                         <button
                             onClick={() => setIsLogin(true)}
                             className={`flex-1 py-2 text-sm font-medium rounded-full transition cursor-pointer ${
-                                isLogin ? 'bg-[#184b44] text-white shadow-sm' : 'text-gray-500'
+                                isLogin ? 'bg-[#0e6b7a] text-white shadow-sm' : 'text-gray-500'
                             }`}>
                             Log In
                         </button>
                         <button
                             onClick={() => setIsLogin(false)}
                             className={`flex-1 py-2 text-sm font-medium rounded-full transition cursor-pointer ${
-                                !isLogin ? 'bg-[#184b44] text-white shadow-sm' : 'text-gray-500'
+                                !isLogin ? 'bg-[#0e6b7a] text-white shadow-sm' : 'text-gray-500'
                             }`}>
                             Create Account
                         </button>
                     </div>
 
-                    <h2 className="text-xl font-bold text-gray-900 mb-1"
+                    <h2 className="text-xl font-bold text-[#2d3748] mb-1"
                         style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                         {isLogin ? 'Welcome back 👋' : 'Get started'}
                     </h2>
@@ -97,9 +93,8 @@ const AuthPage = () => {
                         {isLogin ? 'Sign in to your account.' : 'Create your free account.'}
                     </p>
 
-                    {/* Error message */}
                     {error && (
-                        <div className="bg-red-50 border border-red-100 text-red-500 text-sm px-4 py-3 rounded-xl mb-4">
+                        <div className="bg-red-50 border border-red-100 text-red-400 text-sm px-4 py-3 rounded-xl mb-4">
                             {error}
                         </div>
                     )}
@@ -110,14 +105,14 @@ const AuthPage = () => {
                             placeholder="Email address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#184b44] focus:ring-1 focus:ring-[#184b44] bg-gray-50"
+                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
                         />
                         <input
                             type="password"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#184b44] focus:ring-1 focus:ring-[#184b44] bg-gray-50"
+                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
                         />
 
                         {!isLogin && (
@@ -125,7 +120,7 @@ const AuthPage = () => {
                                 <select
                                     value={role}
                                     onChange={(e) => setRole(e.target.value)}
-                                    className="appearance-none w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#184b44] bg-gray-50"
+                                    className="appearance-none w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white"
                                 >
                                     <option value="customer">I am a Customer</option>
                                     <option value="owner">I am an Owner</option>
@@ -134,14 +129,14 @@ const AuthPage = () => {
                             </div>
                         )}
 
-                        <label className="flex items-center gap-2 text-sm text-gray-500 cursor-pointer">
-                            <input type="checkbox" className="accent-[#184b44]" />
+                        <label className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer">
+                            <input type="checkbox" className="accent-[#0e6b7a]" />
                             Stay signed in
                         </label>
 
                         <button
                             type="submit"
-                            className="bg-[#184b44] text-white py-3 rounded-xl text-sm font-semibold hover:bg-[#0f3330] transition cursor-pointer mt-1">
+                            className="bg-[#0e6b7a] text-white py-3 rounded-xl text-sm font-semibold hover:bg-[#0a5566] transition cursor-pointer mt-1">
                             {isLogin ? 'Log In' : 'Create Account'}
                         </button>
                     </form>
