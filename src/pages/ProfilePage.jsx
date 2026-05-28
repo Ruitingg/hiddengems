@@ -33,13 +33,12 @@ const ProfilePage = () => {
             setPortfolio(portfolioData || [])
             setLoading(false)
         }
-
         fetchData()
     }, [id])
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#ede1d2] flex items-center justify-center">
+            <div className="min-h-screen bg-white flex items-center justify-center">
                 <p className="text-[#184b44] text-lg font-semibold">Loading...</p>
             </div>
         )
@@ -47,123 +46,124 @@ const ProfilePage = () => {
 
     if (!hbb) {
         return (
-            <div className="min-h-screen bg-[#ede1d2] flex items-center justify-center">
-                <p className="text-[#184b44] text-lg font-semibold">404 — Business not found.</p>
+            <div className="min-h-screen bg-white flex items-center justify-center">
+                <p className="text-gray-500 text-lg">404 — Business not found.</p>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-[#ede1d2] px-6 py-8 max-w-3xl mx-auto">
+        <div className="min-h-screen bg-white">
 
-            {/* Back button */}
-            <button
-                onClick={() => navigate('/')}
-                className="flex items-center gap-1 text-[#184b44] hover:text-[#284771] mb-6 text-sm font-medium transition"
-            >
-                ← Back
-            </button>
+            {/* Green header banner */}
+            <div className="bg-[#184b44] px-6 pt-6 pb-8">
+                <button
+                    onClick={() => navigate('/')}
+                    className="flex items-center gap-1 text-green-200 hover:text-white mb-4 text-sm transition"
+                >
+                    ← Back
+                </button>
 
-            {/* Header */}
-            <div className="mb-6">
-                <div className="flex items-center gap-3 flex-wrap mb-2">
-                    <h1 className="text-3xl font-bold text-[#184b44]"
-                        style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                        {hbb.name}
-                    </h1>
-                    {hbb.verified && (
-                        <span className="text-xs text-white bg-[#284771] px-3 py-1 rounded-full">
-                            ✓ Verified
-                        </span>
-                    )}
+                <div className="flex items-start justify-between">
+                    <div>
+                        <h1 className="text-white text-2xl font-bold mb-2"
+                            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                            {hbb.name}
+                        </h1>
+                        <div className="flex gap-2 flex-wrap">
+                            <span className="bg-white/20 text-white text-xs px-3 py-1 rounded-full">
+                                {hbb.category}
+                            </span>
+                            <span className="bg-white/20 text-white text-xs px-3 py-1 rounded-full">
+                                {hbb.area}
+                            </span>
+                            {hbb.verified && (
+                                <span className="bg-white text-[#184b44] text-xs px-3 py-1 rounded-full font-medium">
+                                    ✓ Verified
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-green-200 text-xs mb-1">Charm Score</p>
+                        <p className="text-white font-bold text-lg">
+                            💎 {hbb.charm_score > 0 ? hbb.charm_score : 'New'}
+                        </p>
+                    </div>
                 </div>
+            </div>
 
-                {/* Tags */}
-                <div className="flex gap-2 mb-3">
-                    <span className="bg-[#e3d1bd] text-[#184b44] text-xs px-3 py-1 rounded-full">
-                        {hbb.category}
-                    </span>
-                    <span className="bg-[#e3d1bd] text-[#184b44] text-xs px-3 py-1 rounded-full">
-                        {hbb.area}
-                    </span>
+            <div className="px-6 py-6 max-w-3xl mx-auto">
+
+                {/* Description */}
+                <div className="mb-6">
+                    <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">About</h2>
+                    <p className="text-gray-700 text-sm leading-relaxed">{hbb.description}</p>
                 </div>
-
-                <p className="text-gray-700 text-sm leading-relaxed">{hbb.description}</p>
 
                 {/* Contact & Socials */}
-                <div className="mt-4 p-4 bg-white rounded-xl shadow-sm">
-                    <h3 className="font-semibold text-[#184b44] text-sm mb-2">Contact & Socials</h3>
-                    <div className="flex flex-col gap-1 text-sm text-gray-600">
+                <div className="mb-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                    <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Contact & Socials</h2>
+                    <div className="flex flex-col gap-2 text-sm text-gray-700">
                         <span>📸 Instagram: @placeholder_instagram</span>
                         <span>🎵 TikTok: @placeholder_tiktok</span>
                         <span>💬 WhatsApp: +65 0000 0000</span>
                     </div>
                 </div>
-            </div>
 
-            {/* Portfolio gallery */}
-            <div className="mb-8">
-                <h2 className="text-lg font-bold text-[#184b44] mb-3"
-                    style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                    Portfolio
-                </h2>
-                {portfolio.length === 0 ? (
-                    <div className="w-full h-32 bg-[#e3d1bd] rounded-xl flex items-center justify-center">
-                        <p className="text-sm text-gray-500">No photos yet</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-2 gap-3">
-                        {portfolio.map((item) => (
-                            <div key={item.id} className="rounded-xl overflow-visible">
-                                <img src={item.photo_url} alt={item.caption}
-                                    className="w-full h-40 object-cover rounded-xl" />
-                                <p className="text-xs text-gray-500 mt-1 break-words">{item.caption}</p>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            {/* Products */}
-            <div className="mb-8">
-                <h2 className="text-lg font-bold text-[#184b44] mb-3"
-                    style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                    Menu / Products
-                </h2>
-                {products.length === 0 ? (
-                    <p className="text-sm text-gray-500">No products listed yet.</p>
-                ) : (
-                    <div className="flex flex-col gap-3">
-                        {products.map((product) => (
-                            <div key={product.id}
-                                className="bg-white rounded-xl px-4 py-3 flex justify-between items-center shadow-sm">
-                                <div>
-                                    <p className="font-medium text-[#184b44] text-sm">{product.name}</p>
-                                    <p className="text-xs text-gray-500">{product.description}</p>
+                {/* Portfolio */}
+                <div className="mb-6">
+                    <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Portfolio</h2>
+                    {portfolio.length === 0 ? (
+                        <div className="w-full h-32 bg-gray-100 rounded-2xl flex items-center justify-center">
+                            <p className="text-sm text-gray-400">No photos yet</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-3">
+                            {portfolio.map((item) => (
+                                <div key={item.id}>
+                                    <img src={item.photo_url} alt={item.caption}
+                                        className="w-full h-40 object-cover rounded-2xl" />
+                                    <p className="text-xs text-gray-400 mt-1">{item.caption}</p>
                                 </div>
-                                <p className="text-[#284771] font-bold text-sm">${product.price}</p>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Products */}
+                <div className="mb-6">
+                    <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Menu / Products</h2>
+                    {products.length === 0 ? (
+                        <p className="text-sm text-gray-400">No products listed yet.</p>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            {products.map((product) => (
+                                <div key={product.id}
+                                    className="bg-white rounded-2xl border border-gray-100 px-4 py-3 flex justify-between items-center shadow-sm">
+                                    <div>
+                                        <p className="font-medium text-gray-900 text-sm">{product.name}</p>
+                                        <p className="text-xs text-gray-400">{product.description}</p>
+                                    </div>
+                                    <p className="text-[#184b44] font-bold text-sm">${product.price}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Reviews */}
+                <div className="mb-8">
+                    <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Reviews</h2>
+                    <p className="text-sm text-gray-400">No reviews yet. Be the first to order!</p>
+                </div>
+
+                {/* Order button */}
+                <button className="w-full bg-[#184b44] text-white py-4 rounded-2xl font-semibold hover:bg-[#0f3330] transition cursor-pointer text-base">
+                    Order Now
+                </button>
+
             </div>
-
-            {/* Reviews placeholder */}
-            <div className="mb-8">
-                <h2 className="text-lg font-bold text-[#184b44] mb-3"
-                    style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                    Reviews
-                </h2>
-                <p className="text-sm text-gray-500">
-                    No reviews yet. Be the first to order!
-                </p>
-            </div>
-
-            {/* Order button */}
-            <button className="w-full bg-[#184b44] text-white py-3 rounded-full font-medium hover:bg-[#284771] transition cursor-pointer">
-                Order Now
-            </button>
-
         </div>
     )
 }
