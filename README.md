@@ -46,8 +46,6 @@ Home-based businesses (HBBs) in Singapore - bakers, nail artists, craft sellers,
 
 There is currently no platform in Singapore built specifically for HBBs. Carousell is built for secondhand goods. Facebook Marketplace lacks trust signals. Instagram is a social feed, not a marketplace. HiddenGems aims to fill that gap - giving every HBB a professional presence and giving every customer a trustworthy place to discover and support local businesses.
 
----
-
 ## Aim
 
 HiddenGems is a mobile-first Progressive Web App that helps people in Singapore discover home-based businesses, and gives HBB owners the tools they need to run and grow their business without needing a developer or a social media following.
@@ -60,13 +58,9 @@ We aim to:
 - Enable CDC Voucher payments so HBBs benefit from Singapore's government-supported local spending scheme
 - Give owners a simple analytics dashboard to track orders, identify best-sellers, and plan for peak periods
 
----
-
 ## Proposed Level of Achievement
 
 Apollo 11
-
----
 
 ## User Stories
 
@@ -88,8 +82,6 @@ Apollo 11
 
 **As a platform admin, I want to:**
 1. Review and approve or reject HBB verification requests so that only legitimate businesses are listed on the platform
-
----
 
 ## Features
 
@@ -129,8 +121,6 @@ Apollo 11
 | Push Notifications | Followers receive push notifications when an HBB posts a new batch or promotion. |
 | Smart Recommendation Engine | Recommends HBBs based on customer preferences, occasion, and Charm Score to reduce discovery friction. |
 
----
-
 ## Tech Stack
 
 | Layer | Technology | Justification |
@@ -145,13 +135,9 @@ Apollo 11
 | Deployment | Vercel | Zero-config deployment connected directly to GitHub - auto-deploys on every push to main |
 | PWA | Web App Manifest + Service Worker | Enables the app to be installed on any phone home screen without App Store or Play Store submission |
 
----
-
 ## System Architecture
 
 ![Architecture Diagram](docs/architecture_milestone1.png)
-
----
 
 ## Database Schema
 
@@ -173,47 +159,43 @@ Apollo 11
 
 ![ER Diagram](docs/ERdiagram_milestone1.png)
 
----
-
 ## Wireframes and Mockups
 
 ### Built - Milestone 1
 
 **Login and Create Account**
 
-![Login](docs/milestone1_login.png)
+<img src="docs/milestone1_login.png" width="250" alt="Login"/>
 
 **Discovery Page**
 
-![Discovery](docs/milestone1_discovery.png)
+<img src="docs/milestone1_discovery.png" width="250" alt="Discovery"/>
 
 **HBB Profile Page**
 
-![Profile](docs/milestone1_profile.png)
+<img src="docs/milestone1_profile.png" width="250" alt="Profile"/>
 
 **Owner Dashboard**
 
-![Dashboard](docs/milestone1_dashboard.png)
+<img src="docs/milestone1_dashboard.png" width="250" alt="Dashboard"/>
 
 ### Designed - Milestone 2 and 3
 
 **Notifications**
 
-![Notifications](docs/mockup_notifications.png)
+<img src="docs/mockup_notifications.png" width="250" alt="Notifications"/>
 
 **Order and Booking Flow**
 
-![Order Booking](docs/mockup_orders.png)
+<img src="docs/mockup_orders.png" width="250" alt="Order Booking"/>
 
 **Seller Dashboard**
 
-![Seller Dashboard](docs/mockup_seller_dashboard.png)
+<img src="docs/mockup_seller_dashboard.png" width="250" alt="Seller Dashboard"/>
 
 **My Gems - Loyalty and Points**
 
-![Gems](docs/mockup_gems.png)
-
----
+<img src="docs/mockup_gems.png" width="250" alt="Gems"/>
 
 ## Software Engineering Practices
 
@@ -245,8 +227,6 @@ Vercel is connected directly to GitHub. Every push to main triggers an automatic
 
 Built with Tailwind CSS mobile-first utility classes. All pages are tested on real devices at the live Vercel URL across iOS and Android.
 
----
-
 ## Testing Plan
 
 Testing will be introduced from Milestone 2 onward:
@@ -254,8 +234,6 @@ Testing will be introduced from Milestone 2 onward:
 - **Unit tests (Vitest):** Core logic functions - Charm Score computation, points balance updates, lead time calculator, and slot availability checks - will each have dedicated unit tests run on every pull request via GitHub Actions.
 - **Integration tests:** Supabase query functions and authentication flows (sign up, login, role redirect, session persistence) will be tested against a dedicated test database.
 - **End-to-end tests (Playwright):** Critical user flows - signing up, creating a profile, placing an order, leaving a verified review, and redeeming points - will be covered by automated browser tests run against a staging environment before each milestone submission.
-
----
 
 ## Known Limitations
 
@@ -266,8 +244,6 @@ The following are known limitations in the Milestone 1 proof of concept that wil
 - **RLS policies not yet implemented:** Row Level Security is currently disabled on all tables during development. Full RLS policies ensuring owners can only access their own data and customers can only access their own orders will be applied in Milestone 2.
 - **Owner profile not linked to HBB listings:** Owners can log in and see the dashboard, but the dashboard does not yet display their linked HBB profile. This connection will be built in Milestone 2.
 - **No order flow:** The ordering feature is fully designed and mockuped but not yet built. It is the primary goal for Milestone 2.
-
----
 
 ## Planned Features - Milestone 2 and 3
 
@@ -290,8 +266,6 @@ The following are known limitations in the Milestone 1 proof of concept that wil
 - Push notifications for followers
 - AI-assisted recommendation engine
 
----
-
 ## Live Deployment
 
 **https://hiddengems-five.vercel.app/**
@@ -309,8 +283,6 @@ The following features are live and testable:
 |---|---|---|
 | Owner | owner@gmail.com | 123456 |
 | Customer | customer@gmail.com | 78910 |
-
----
 
 ## Running Locally
 
