@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="docs/diamondIcon.png" alt="HiddenGems Logo" width="36" />
+  <img src="https://drive.google.com/uc?export=view&id=1k3M2aIN6iLAGwOemHoExV5qD2-9IP5j1" alt="HiddenGems Logo" width="36" />
   &nbsp;HiddenGems
 </h1>
 
@@ -137,7 +137,7 @@ Apollo 11
 
 ## System Architecture
 
-![Architecture Diagram](docs/architecture_milestone1.png)
+![Architecture Diagram](https://drive.google.com/uc?export=view&id=1fYY2TSqZhtNRTBU7byj3R9hWnnTvlPIa)
 
 ## Database Schema
 
@@ -157,7 +157,7 @@ Apollo 11
 | `portfolio_items` | Photos uploaded by owners to showcase their work - linked to hbb_profiles |
 | `loyalty_pools` | Linked pools shared between partner HBBs - enables cross-business point earning and redemption |
 
-![ER Diagram](docs/ERdiagram_milestone1.png)
+![ER Diagram](https://drive.google.com/uc?export=view&id=1oZmYa59GbsDeWIzDj2mbBaTWTkGfq76a)
 
 ## Wireframes and Mockups
 
@@ -165,37 +165,37 @@ Apollo 11
 
 **Login and Create Account**
 
-<img src="docs/milestone1_login.png" width="250" alt="Login"/>
+<img src="https://drive.google.com/uc?export=view&id=1ojhgidDG90hCYjSN4KkALvCj_U04qs15" width="250" alt="Login"/>
 
 **Discovery Page**
 
-<img src="docs/milestone1_discovery.png" width="250" alt="Discovery"/>
+<img src="https://drive.google.com/uc?export=view&id=1ojhgidDG90hCYjSN4KkALvCj_U04qs15" width="250" alt="Discovery"/>
 
 **HBB Profile Page**
 
-<img src="docs/milestone1_profile.png" width="250" alt="Profile"/>
+<img src="https://drive.google.com/uc?export=view&id=1qfSZ-94i3Tcj_RoSDjoIh-w_qyfbqoFM" width="250" alt="Profile"/>
 
 **Owner Dashboard**
 
-<img src="docs/milestone1_dashboard.png" width="250" alt="Dashboard"/>
+<img src="https://drive.google.com/uc?export=view&id=1FBBtR1ipMDYBpYPFgLZdP3MHkQIKbiYY" width="250" alt="Dashboard"/>
 
 ### Designed - Milestone 2 and 3
 
 **Notifications**
 
-<img src="docs/mockup_notifications.png" width="250" alt="Notifications"/>
+<img src="https://drive.google.com/uc?export=view&id=1CAgMicBu7I9tMJPyTlmrciVbf5U-GcgR" width="250" alt="Notifications"/>
 
 **Order and Booking Flow**
 
-<img src="docs/mockup_orders.png" width="250" alt="Order Booking"/>
+<img src="https://drive.google.com/uc?export=view&id=1AcsAZwp0_PWukKUruAaLS_WZbUPhZi08" width="250" alt="Order Booking"/>
 
 **Seller Dashboard**
 
-<img src="docs/mockup_seller_dashboard.png" width="250" alt="Seller Dashboard"/>
+<img src="https://drive.google.com/uc?export=view&id=1CsfljSI7x-kyl4DibFxQAlL_0h8-uSq9"/>
 
 **My Gems - Loyalty and Points**
 
-<img src="docs/mockup_gems.png" width="250" alt="Gems"/>
+<img src="https://drive.google.com/uc?export=view&id=16FX90fAeQqnPB_cRjNkib59Ia0dsbRQe" width="250" alt="Gems"/>
 
 ## Software Engineering Practices
 
