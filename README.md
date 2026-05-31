@@ -169,7 +169,7 @@ Apollo 11
 
 **Discovery Page**
 
-<img src="https://drive.google.com/uc?export=view&id=1ojhgidDG90hCYjSN4KkALvCj_U04qs15" width="250" alt="Discovery"/>
+<img src="https://drive.google.com/uc?export=view&id=1rPccnqWM-gUt3kBvKx471twrnPvNG2-f" width="250" alt="Discovery"/>
 
 **HBB Profile Page**
 
@@ -191,7 +191,7 @@ Apollo 11
 
 **Seller Dashboard**
 
-<img src="https://drive.google.com/uc?export=view&id=1CsfljSI7x-kyl4DibFxQAlL_0h8-uSq9"/>
+<img src="https://drive.google.com/uc?export=view&id=1CsfljSI7x-kyl4DibFxQAlL_0h8-uSq9" width="250" alt="Seller Dashboard"/>
 
 **My Gems - Loyalty and Points**
 
