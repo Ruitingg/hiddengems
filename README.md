@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="docs/diamondIcon.svg" alt="HiddenGems Logo" width="36" />
+  <img src="docs/diamondIcon.png" alt="HiddenGems Logo" width="36" />
   &nbsp;HiddenGems
 </h1>
 
