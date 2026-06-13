@@ -30,20 +30,21 @@ const AuthPage = () => {
         if (isLogin) {
             let loginEmail = email
 
-        if (!email.includes('@')) {
-            const { data: lookupEmail } = await supabase.rpc('get_email_by_username', { input_username: email })
+            if (!email.includes('@')) {
+                const { data: lookupEmail } = await supabase.rpc('get_email_by_username', { input_username: email })
 
-        if (!lookupEmail) {
-            setError('Incorrect email/username or password. Please try again.')
-            return
-        }
-loginEmail = lookupEmail
+                if (!lookupEmail) {
+                    setError('Incorrect email/username or password. Please try again.')
+                    return
+                }
+                loginEmail = lookupEmail
+            }
 
-        const { data, error } = await supabase.auth.signInWithPassword({ email: loginEmail, password })
-        if (error) {
-            setError('Incorrect email or password. Please try again.')
-            return
-        }
+            const { data, error } = await supabase.auth.signInWithPassword({ email: loginEmail, password })
+            if (error) {
+                setError('Incorrect email or password. Please try again.')
+                return
+            }
             const { data: userData } = await supabase
                 .from('users')
                 .select('role')
@@ -119,7 +120,7 @@ loginEmail = lookupEmail
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                         <input
-                            type="email"
+                            type="text"
                             placeholder={isLogin ? "Email or username" : "Email address"}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -136,23 +137,13 @@ loginEmail = lookupEmail
                             />
                         )}
 
-                        <input 
+                        <input
                             type="password"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
                         />
-
-                        {!isLogin && (
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
-                        />
-                        )}  
 
                         {!isLogin && (
                             <div className="relative">
