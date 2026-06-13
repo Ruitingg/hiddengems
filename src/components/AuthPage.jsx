@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import DiamondIcon from '../components/DiamondIcon'
+import { useAuth } from '../lib/AuthContext'
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true)
@@ -10,6 +11,11 @@ const AuthPage = () => {
     const [role, setRole] = useState('customer')
     const [error, setError] = useState('')
     const navigate = useNavigate()
+    const { session, loading } = useAuth()
+
+    if (!loading && session) {
+        return <Navigate to="/" />
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()

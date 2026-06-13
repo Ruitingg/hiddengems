@@ -157,7 +157,7 @@ Apollo 11
 | `portfolio_items` | Photos uploaded by owners to showcase their work - linked to hbb_profiles |
 | `loyalty_pools` | Linked pools shared between partner HBBs - enables cross-business point earning and redemption |
 
-![ER Diagram](docs/ERdiagram-milestone1.png)
+![ER Diagram](docs/ERdiagram_milestone1.png)
 
 ## Wireframes and Mockups
 

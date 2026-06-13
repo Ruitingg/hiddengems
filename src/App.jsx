@@ -5,22 +5,27 @@ import AuthPage from './components/AuthPage'
 import ProfilePage from './pages/ProfilePage'
 import DashboardPage from './pages/DashboardPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import RootRedirect from './components/RootRedirect'
+import { AuthProvider } from './lib/AuthContext'
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<DiscoveryPage />} />
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/profile/:id" element={<ProfilePage />} />
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        } />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<RootRedirect />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/discover" element={<DiscoveryPage />} />
+          <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </Router>
+    </AuthProvider>
   )
 }
 

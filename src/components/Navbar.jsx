@@ -1,49 +1,15 @@
-import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../lib/AuthContext'
 import DiamondIcon from './DiamondIcon'
 
 const Navbar = () => {
-    const [user, setUser] = useState(null)
-    const [role, setRole] = useState(null)
+    const { session, role } = useAuth()
     const navigate = useNavigate()
-
-    useEffect(() => {
-        const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
-            if (session) {
-                setUser(session.user)
-                fetchRole(session.user.id)
-            }
-        }
-
-        getSession()
-
-        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-            if (session) {
-                setUser(session.user)
-                fetchRole(session.user.id)
-            } else {
-                setUser(null)
-                setRole(null)
-            }
-        })
-
-        return () => listener.subscription.unsubscribe()
-    }, [])
-
-    const fetchRole = async (userId) => {
-        const { data } = await supabase
-            .from('users')
-            .select('role')
-            .eq('id', userId)
-            .single()
-        if (data) setRole(data.role)
-    }
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
-        navigate('/')
+        navigate('/auth')
     }
 
     return (
@@ -57,14 +23,14 @@ const Navbar = () => {
             </Link>
 
             <div className="flex items-center gap-3">
-                {!user ? (
+                {!session ? (
                     <Link to="/auth"
                         className="bg-[#0e6b7a] text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-[#0a5566] transition">
                         Log In
                     </Link>
                 ) : (
                     <>
-                        <span className="text-gray-400 text-sm hidden sm:block">{user.email}</span>
+                        <span className="text-gray-400 text-sm hidden sm:block">{session.user.email}</span>
                         {role === 'owner' && (
                             <Link to="/dashboard"
                                 className="text-[#0e6b7a] text-sm font-medium hover:underline">
