@@ -9,6 +9,7 @@ const AuthPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [role, setRole] = useState('customer')
+    const [username, setUsername] = useState('')
     const [error, setError] = useState('')
     const navigate = useNavigate()
     const { session, loading } = useAuth()
@@ -21,7 +22,7 @@ const AuthPage = () => {
         e.preventDefault()
         setError('')
 
-        if (!email || !password) {
+        if (!email || !password || (!isLogin && !username)) {
             setError('Please fill in all fields.')
             return
         }
@@ -48,7 +49,7 @@ const AuthPage = () => {
                 setError(error.message)
                 return
             }
-            await supabase.from('users').insert({ id: data.user.id, email, role })
+            await supabase.from('users').insert({ id: data.user.id, email, role, username })
             if (role === 'owner') {
                 navigate('/dashboard')
             } else {
@@ -93,7 +94,7 @@ const AuthPage = () => {
 
                     <h2 className="text-xl font-bold text-[#2d3748] mb-1"
                         style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                        {isLogin ? 'Welcome back 👋' : 'Get started'}
+                        {isLogin ? 'Welcome back' : 'Get started'}
                     </h2>
                     <p className="text-sm text-gray-400 mb-6">
                         {isLogin ? 'Sign in to your account.' : 'Create your free account.'}
@@ -113,13 +114,24 @@ const AuthPage = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
                         />
-                        <input
+
+                        <input 
                             type="password"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
                         />
+
+                        {!isLogin && (
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
+                        />
+                        )}  
 
                         {!isLogin && (
                             <div className="relative">
