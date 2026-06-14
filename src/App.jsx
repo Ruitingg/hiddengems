@@ -4,6 +4,7 @@ import DiscoveryPage from './pages/DiscoveryPage'
 import AuthPage from './components/AuthPage'
 import ProfilePage from './pages/ProfilePage'
 import DashboardPage from './pages/DashboardPage'
+import SetupPage from './pages/SetupPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import RootRedirect from './components/RootRedirect'
 import { AuthProvider } from './lib/AuthContext'
@@ -21,6 +22,11 @@ function App() {
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/setup" element={
+            <ProtectedRoute>
+              <SetupPage />
             </ProtectedRoute>
           } />
         </Routes>

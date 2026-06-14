@@ -62,10 +62,11 @@ const AuthPage = () => {
                 return
             }
             await supabase.from('users').insert({ id: data.user.id, email, role, username })
-            if (role === 'owner') {
-                navigate('/dashboard')
-            } else {
-                navigate('/')
+                if (role === 'owner') {
+                    navigate('/setup')
+                } else {
+                    navigate('/')
+                }
             }
         }
     }
