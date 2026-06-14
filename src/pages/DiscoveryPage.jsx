@@ -18,6 +18,7 @@ const DiscoveryPage = () => {
             const { data, error } = await supabase
                 .from('hbb_profiles')
                 .select('*')
+                .eq('verified', true)
             if (error) {
                 console.log('Error fetching HBBs:', error)
             } else {
