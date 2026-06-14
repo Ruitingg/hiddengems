@@ -32,7 +32,6 @@ const AuthPage = () => {
 
             if (!email.includes('@')) {
                 const { data: lookupEmail } = await supabase.rpc('get_email_by_username', { input_username: email })
-
                 if (!lookupEmail) {
                     setError('Incorrect email/username or password. Please try again.')
                     return
@@ -62,11 +61,10 @@ const AuthPage = () => {
                 return
             }
             await supabase.from('users').insert({ id: data.user.id, email, role, username })
-                if (role === 'owner') {
-                    navigate('/setup')
-                } else {
-                    navigate('/')
-                }
+            if (role === 'owner') {
+                navigate('/setup')
+            } else {
+                navigate('/')
             }
         }
     }
