@@ -2,12 +2,17 @@ import { useState } from 'react'
 import useCalendar from '../hooks/useCalendar'
 import useOwnerProfile from '../hooks/useOwnerProfile'
 import { Navigate } from 'react-router-dom'
+import useSlotCancellation from '../hooks/useSlotCancellation'
 
 const colourOptions = ['#0e6b7a', '#f97316', '#a855f7', '#22c55e', '#ef4444']
 
 const CalendarManagementPage = () => {
     const { profile, loading: profileLoading } = useOwnerProfile()
     const { slots, loading, error, createBatch, toggleSlotStatus } = useCalendar(profile?.id)
+    const { cancelSlot, loading: cancellationLoading } = useSlotCancellation()
+    const [cancellingSlot, setCancellingSlot] = useState(null)
+    const [cancelReason, setCancelReason] = useState('')
+    const [cancelError, setCancelError] = useState('')
 
     const [showForm, setShowForm] = useState(false)
     const [dateTimes, setDateTimes] = useState([{ date: '', time: '' }])
@@ -50,6 +55,25 @@ const CalendarManagementPage = () => {
         setDateTimes([{ date: '', time: '' }])
         setReleaseTime('')
         setNotes('')
+    }
+
+    const handleCancelSlot = async () => {
+        setCancelError('')
+
+        if (!cancelReason.trim()) {
+            setCancelError('Please provide a reason for cancellation.')
+            return
+        }
+
+        const result = await cancelSlot(cancellingSlot.id, cancelReason)
+        if (result.error) {
+            setCancelError(result.error)
+            return
+        }
+
+        setCancellingSlot(null)
+        setCancelReason('')
+        window.location.reload()
     }
 
     if (profileLoading) {
@@ -190,18 +214,73 @@ const CalendarManagementPage = () => {
                             <span className="text-sm font-medium">
                                 {slot.date} · {slot.start_time} · {label}
                             </span>
-                            {slot.status !== 'pending_release' && (
-                                <button
-                                    onClick={() => toggleSlotStatus(slot.id, slot.status === 'available' ? 'booked' : 'available')}
-                                    className="text-xs underline"
-                                >
-                                    Mark as {slot.status === 'available' ? 'Booked' : 'Available'}
-                                </button>
+                            {slot.status !== 'pending_release' && slot.status !== 'cancelled_reopened' && (
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => toggleSlotStatus(slot.id, slot.status === 'available' ? 'booked' : 'available')}
+                                        className="text-xs underline"
+                                    >
+                                        Mark as {slot.status === 'available' ? 'Booked' : 'Available'}
+                                    </button>
+                                    {slot.status === 'booked' && (
+                                        <button
+                                            onClick={() => setCancellingSlot(slot)}
+                                            className="text-xs underline text-red-500"
+                                        >
+                                            Cancel
+                                        </button>
+                                    )}
+                                </div>
                             )}
                         </div>
                     )
                 })}
             </div>
+
+            {cancellingSlot && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-6 z-50">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm">
+                        <h2 className="font-bold text-[#2d3748] mb-2">Cancel this slot?</h2>
+                        <p className="text-sm text-gray-400 mb-4">
+                            {cancellingSlot.date} · {cancellingSlot.start_time}
+                        </p>
+
+                        {cancelError && (
+                            <div className="bg-red-50 border border-red-100 text-red-400 text-sm px-4 py-3 rounded-xl mb-4">
+                                {cancelError}
+                            </div>
+                        )}
+
+                        <textarea
+                            placeholder="Reason for cancellation"
+                            value={cancelReason}
+                            onChange={(e) => setCancelReason(e.target.value)}
+                            rows={3}
+                            className="border border-gray-200 rounded-xl px-3 py-2 text-sm w-full mb-4 resize-none"
+                        />
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => {
+                                    setCancellingSlot(null)
+                                    setCancelReason('')
+                                    setCancelError('')
+                                }}
+                                className="flex-1 bg-[#FAFEFE] border border-gray-200 text-gray-600 py-3 rounded-xl text-sm font-medium"
+                            >
+                                Go Back
+                            </button>
+                            <button
+                                onClick={handleCancelSlot}
+                                disabled={cancellationLoading}
+                                className="flex-1 bg-red-500 text-white py-3 rounded-xl text-sm font-medium disabled:opacity-50"
+                            >
+                                {cancellationLoading ? 'Cancelling...' : 'Confirm Cancellation'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
