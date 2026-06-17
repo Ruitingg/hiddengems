@@ -8,6 +8,7 @@ import SetupPage from './pages/SetupPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import RootRedirect from './components/RootRedirect'
 import { AuthProvider } from './lib/AuthContext'
+import CalendarManagementPage from './pages/CalendarManagementPage'
 
 function App() {
   return (
@@ -27,6 +28,12 @@ function App() {
           <Route path="/setup" element={
             <ProtectedRoute>
               <SetupPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/calendar" element={
+            <ProtectedRoute>
+              <CalendarManagementPage />
             </ProtectedRoute>
           } />
         </Routes>
