@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import useCalendarManagement from '../hooks/useCalendarManagement'
+import useCalendar from '../hooks/useCalendar'
 import useOwnerProfile from '../hooks/useOwnerProfile'
 
 const colourOptions = ['#0e6b7a', '#f97316', '#a855f7', '#22c55e', '#ef4444']
 
 const CalendarManagementPage = () => {
     const { profile } = useOwnerProfile()
-    const { slots, loading, error, createBatch, toggleSlotStatus } = useCalendarManagement(profile?.id)
+    const { slots, loading, error, createBatch, toggleSlotStatus } = useCalendar(profile?.id)
 
     const [showForm, setShowForm] = useState(false)
     const [dateTimes, setDateTimes] = useState([{ date: '', time: '' }])

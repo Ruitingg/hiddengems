@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
-const useCalendarManagement = (hbbId) => {
+const useCalendar = (hbbId) => {
     const [slots, setSlots] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
@@ -84,4 +84,4 @@ const useCalendarManagement = (hbbId) => {
     return { slots, loading, error, createBatch, toggleSlotStatus }
 }
 
-export default useCalendarManagement
+export default useCalendar
