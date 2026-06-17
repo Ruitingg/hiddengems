@@ -9,23 +9,23 @@ const useOwnerProfile = () => {
     const [error, setError] = useState('')
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            const { data, error } = await supabase
-                .from('hbb_profiles')
-                .select('*')
-                .eq('owner_id', session.user.id)
-                .single()
+    const fetchProfile = async () => {
+        const { data, error } = await supabase
+            .from('hbb_profiles')
+            .select('*')
+            .eq('owner_id', session.user.id)
+            .maybeSingle()
 
-            if (error) {
-                setError('Could not load profile.')
-            } else {
-                setProfile(data)
-            }
-            setLoading(false)
+        if (error) {
+            setError('Could not load profile.')
+        } else {
+            setProfile(data)
         }
+        setLoading(false)
+    }
 
-        if (session) fetchProfile()
-    }, [session])
+    if (session) fetchProfile()
+}, [session])
 
     const updateProfile = async (updates) => {
         const { error } = await supabase

@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import useCalendar from '../hooks/useCalendar'
 import useOwnerProfile from '../hooks/useOwnerProfile'
+import { Navigate } from 'react-router-dom'
 
 const colourOptions = ['#0e6b7a', '#f97316', '#a855f7', '#22c55e', '#ef4444']
 
 const CalendarManagementPage = () => {
-    const { profile } = useOwnerProfile()
+    const { profile, loading: profileLoading } = useOwnerProfile()
     const { slots, loading, error, createBatch, toggleSlotStatus } = useCalendar(profile?.id)
 
     const [showForm, setShowForm] = useState(false)
@@ -49,6 +50,18 @@ const CalendarManagementPage = () => {
         setDateTimes([{ date: '', time: '' }])
         setReleaseTime('')
         setNotes('')
+    }
+
+    if (profileLoading) {
+    return (
+        <div className="min-h-screen bg-white flex items-center justify-center">
+            <p className="text-[#0e6b7a] text-lg font-semibold">Loading...</p>
+        </div>
+        )
+    }
+
+    if (!profile) {
+        return <Navigate to="/setup" />
     }
 
     if (loading) {
