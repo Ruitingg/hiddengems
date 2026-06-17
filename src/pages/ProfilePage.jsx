@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import DiamondIcon from '../components/DiamondIcon'
+import AvailabilityCalendar from '../components/AvailabilityCalendar'
 
 const ProfilePage = () => {
     const { id } = useParams()
@@ -144,6 +145,16 @@ const ProfilePage = () => {
                             ))}
                         </div>
                     )}
+                </div>
+
+                <div className="mb-8">
+                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Reviews</h2>
+                    <p className="text-sm text-gray-300">No reviews yet. Be the first to order!</p>
+                </div>
+
+                <div className="mb-6">
+                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Availability</h2>
+                    <AvailabilityCalendar hbbId={hbb.id} />
                 </div>
 
                 <div className="mb-8">
