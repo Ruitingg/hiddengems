@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useOrderDashboard } from '../hooks/useOrderDashboard'
+import { supabase } from '../lib/supabaseClient'
 
 const TABS = [
     { key: 'quotes', label: 'Quote Requests' },
@@ -10,10 +11,11 @@ const TABS = [
 
 const OrderDashboardPage = () => {
     const navigate = useNavigate()
-    const { loading, error, quoteRequests, awaitingPayment, confirmedOrCompleted, sendQuote } = useOrderDashboard()
+    const { loading, error, quoteRequests, awaitingPayment, confirmedOrCompleted, sendQuote, refreshOrders } = useOrderDashboard()
     const [activeTab, setActiveTab] = useState('quotes')
     const [quoteInputs, setQuoteInputs] = useState({})
     const [sendingId, setSendingId] = useState(null)
+    const [completingId, setCompletingId] = useState(null)
 
     const handleQuoteChange = (orderId, value) => {
         setQuoteInputs((prev) => ({ ...prev, [orderId]: value }))
@@ -26,6 +28,39 @@ const OrderDashboardPage = () => {
         setSendingId(orderId)
         await sendQuote(orderId, price)
         setSendingId(null)
+    }
+
+    const handleMarkCompleted = async (order) => {
+        setCompletingId(order.id)
+
+        await supabase
+            .from('orders')
+            .update({ status: 'completed' })
+            .eq('id', order.id)
+
+        const amountSpent = order.quoted_price ?? order.products?.price ?? 0
+        const pointsToAward = Math.round(amountSpent)
+
+        const { data: existingPoints } = await supabase
+            .from('points')
+            .select('*')
+            .eq('user_id', order.customer_id)
+            .single()
+
+        if (existingPoints) {
+            await supabase
+                .from('points')
+                .update({ balance: existingPoints.balance + pointsToAward })
+                .eq('user_id', order.customer_id)
+        } else {
+            await supabase
+                .from('points')
+                .insert({ user_id: order.customer_id, balance: pointsToAward })
+        }
+
+        setCompletingId(null)
+        if (refreshOrders) refreshOrders()
+        window.location.reload()
     }
 
     if (loading) {
@@ -136,10 +171,21 @@ const OrderDashboardPage = () => {
                                 )}
 
                                 {activeTab === 'confirmed' && (
-                                    <div className="bg-green-50 rounded-xl px-3 py-2 mt-2">
-                                        <p className="text-sm font-semibold text-green-600 capitalize">
-                                            {order.status}
-                                        </p>
+                                    <div className="mt-2">
+                                        <div className="bg-green-50 rounded-xl px-3 py-2 mb-2">
+                                            <p className="text-sm font-semibold text-green-600 capitalize">
+                                                {order.status}
+                                            </p>
+                                        </div>
+                                        {order.status === 'paid' && (
+                                            <button
+                                                onClick={() => handleMarkCompleted(order)}
+                                                disabled={completingId === order.id}
+                                                className="w-full bg-[#0e6b7a] text-white py-2 rounded-xl text-sm font-medium hover:bg-[#0a5566] transition disabled:opacity-50"
+                                            >
+                                                {completingId === order.id ? 'Completing...' : 'Mark as Completed'}
+                                            </button>
+                                        )}
                                     </div>
                                 )}
                             </div>

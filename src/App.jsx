@@ -13,6 +13,7 @@ import OrderFormPage from './pages/OrderFormPage'
 import OrderStatusPage from './pages/OrderStatusPage'
 import OrderDashboardPage from './pages/OrderDashboardPage'
 import PaymentPage from './pages/PaymentPage'
+import ReviewPage from './pages/ReviewPage'
 
 function App() {
   return (
@@ -57,6 +58,11 @@ function App() {
           <Route path="/payment/:orderId" element={
             <ProtectedRoute>
               <PaymentPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/review/:orderId" element={
+            <ProtectedRoute>
+              <ReviewPage />
             </ProtectedRoute>
           } />
         </Routes>
