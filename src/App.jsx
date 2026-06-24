@@ -9,6 +9,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import RootRedirect from './components/RootRedirect'
 import { AuthProvider } from './lib/AuthContext'
 import CalendarManagementPage from './pages/CalendarManagementPage'
+import OrderFormPage from './pages/OrderFormPage'
+import OrderStatusPage from './pages/OrderStatusPage'
 
 function App() {
   return (
@@ -30,10 +32,19 @@ function App() {
               <SetupPage />
             </ProtectedRoute>
           } />
-
           <Route path="/calendar" element={
             <ProtectedRoute>
               <CalendarManagementPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/order/:hbbId" element={
+            <ProtectedRoute>
+              <OrderFormPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/order-status/:orderId" element={
+            <ProtectedRoute>
+              <OrderStatusPage />
             </ProtectedRoute>
           } />
         </Routes>

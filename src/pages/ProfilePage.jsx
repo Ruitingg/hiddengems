@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import DiamondIcon from '../components/DiamondIcon'
-import AvailabilityCalendar from '../components/AvailabilityCalendar'
 
 const ProfilePage = () => {
     const { id } = useParams()
@@ -19,14 +18,17 @@ const ProfilePage = () => {
                 .select('*')
                 .eq('id', id)
                 .single()
+
             const { data: productsData } = await supabase
                 .from('products')
                 .select('*')
                 .eq('hbb_id', id)
+
             const { data: portfolioData } = await supabase
                 .from('portfolio_items')
                 .select('*')
                 .eq('hbb_id', id)
+
             setHbb(hbbData)
             setProducts(productsData || [])
             setPortfolio(portfolioData || [])
@@ -52,123 +54,4 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-white">
-
-            <div className="bg-[#FAFEFE] px-6 pt-6 pb-8 border-b border-gray-100">
-                <button
-                    onClick={() => navigate('/')}
-                    className="flex items-center gap-1 text-gray-400 hover:text-[#0e6b7a] mb-4 text-sm transition"
-                >
-                    ← Back
-                </button>
-
-                <div className="flex items-start justify-between">
-                    <div>
-                        <h1 className="text-[#2d3748] text-2xl font-bold mb-2"
-                            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                            {hbb.name}
-                        </h1>
-                        <div className="flex gap-2 flex-wrap">
-                            <span className="bg-white text-[#374151] text-xs px-3 py-1 rounded-full border border-gray-200">
-                                {hbb.category}
-                            </span>
-                            <span className="bg-white text-[#374151] text-xs px-3 py-1 rounded-full border border-gray-200">
-                                {hbb.area}
-                            </span>
-                            {hbb.verified && (
-                                <span className="bg-[#0e6b7a] text-white text-xs px-3 py-1 rounded-full font-medium">
-                                    ✓ Verified
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    <div className="text-right">
-                        <p className="text-gray-400 text-xs mb-1">Charm Score</p>
-                        <div className="flex items-center justify-end gap-1 text-[#0e6b7a] font-bold text-lg">
-                            <DiamondIcon size={16} color="#0e6b7a" />
-                            {hbb.charm_score > 0 ? hbb.charm_score : 'New'}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="px-6 py-6 max-w-3xl mx-auto">
-
-                <div className="mb-6">
-                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-2">About</h2>
-                    <p className="text-[#4b5563] text-sm leading-relaxed">{hbb.description}</p>
-                </div>
-
-                <div className="mb-6 p-4 bg-[#FAFEFE] rounded-2xl border border-gray-100">
-                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Contact & Socials</h2>
-                    <div className="flex flex-col gap-2 text-sm text-[#374151]">
-                        <span>📸 Instagram: @placeholder_instagram</span>
-                        <span>🎵 TikTok: @placeholder_tiktok</span>
-                        <span>💬 WhatsApp: +65 0000 0000</span>
-                    </div>
-                </div>
-
-                <div className="mb-6">
-                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Portfolio</h2>
-                    {portfolio.length === 0 ? (
-                        <div className="w-full h-32 bg-[#FAFEFE] rounded-2xl flex items-center justify-center border border-gray-100">
-                            <p className="text-sm text-gray-300">No photos yet</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-2 gap-3">
-                            {portfolio.map((item) => (
-                                <div key={item.id}>
-                                    <img src={item.photo_url} alt={item.caption}
-                                        className="w-full h-40 object-cover rounded-2xl" />
-                                    <p className="text-xs text-gray-400 mt-1">{item.caption}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="mb-6">
-                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Menu / Products</h2>
-                    {products.length === 0 ? (
-                        <p className="text-sm text-gray-300">No products listed yet.</p>
-                    ) : (
-                        <div className="flex flex-col gap-3">
-                            {products.map((product) => (
-                                <div key={product.id}
-                                    className="bg-white rounded-2xl border border-gray-100 px-4 py-3 flex justify-between items-center shadow-sm">
-                                    <div>
-                                        <p className="font-medium text-[#2d3748] text-sm">{product.name}</p>
-                                        <p className="text-xs text-gray-400">{product.description}</p>
-                                    </div>
-                                    <p className="text-[#0e6b7a] font-bold text-sm">${product.price}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="mb-8">
-                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Reviews</h2>
-                    <p className="text-sm text-gray-300">No reviews yet. Be the first to order!</p>
-                </div>
-
-                <div className="mb-6">
-                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Availability</h2>
-                    <AvailabilityCalendar hbbId={hbb.id} />
-                </div>
-
-                <div className="mb-8">
-                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Reviews</h2>
-                    <p className="text-sm text-gray-300">No reviews yet. Be the first to order!</p>
-                </div>
-
-                <button className="w-full bg-[#0e6b7a] text-white py-4 rounded-2xl font-semibold hover:bg-[#0a5566] transition cursor-pointer text-base">
-                    Order Now
-                </button>
-
-            </div>
-        </div>
-    )
-}
-
-export default ProfilePage
+        <div className="min-h-screen bg-white"></div>
