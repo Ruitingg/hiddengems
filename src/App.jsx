@@ -11,6 +11,7 @@ import { AuthProvider } from './lib/AuthContext'
 import CalendarManagementPage from './pages/CalendarManagementPage'
 import OrderFormPage from './pages/OrderFormPage'
 import OrderStatusPage from './pages/OrderStatusPage'
+import OrderDashboardPage from './pages/OrderDashboardPage'
 
 function App() {
   return (
@@ -45,6 +46,11 @@ function App() {
           <Route path="/order-status/:orderId" element={
             <ProtectedRoute>
               <OrderStatusPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/order-dashboard" element={
+            <ProtectedRoute>
+              <OrderDashboardPage />
             </ProtectedRoute>
           } />
         </Routes>
