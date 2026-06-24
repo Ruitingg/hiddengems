@@ -62,42 +62,53 @@ const OrderStatusPage = () => {
                         )}
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-0">
-                        {STEPS.map((step, index) => {
-                            const isComplete = index < currentStepIndex
-                            const isCurrent = index === currentStepIndex
+                    <>
+                        <div className="flex flex-col gap-0 mb-6">
+                            {STEPS.map((step, index) => {
+                                const isComplete = index < currentStepIndex
+                                const isCurrent = index === currentStepIndex
 
-                            return (
-                                <div key={step} className="flex gap-4">
-                                    <div className="flex flex-col items-center">
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                                            isComplete || isCurrent
-                                                ? 'bg-[#0e6b7a] text-white'
-                                                : 'bg-gray-100 text-gray-400'
-                                        }`}>
-                                            {isComplete ? '✓' : index + 1}
+                                return (
+                                    <div key={step} className="flex gap-4">
+                                        <div className="flex flex-col items-center">
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                                                isComplete || isCurrent
+                                                    ? 'bg-[#0e6b7a] text-white'
+                                                    : 'bg-gray-100 text-gray-400'
+                                            }`}>
+                                                {isComplete ? '✓' : index + 1}
+                                            </div>
+                                            {index < STEPS.length - 1 && (
+                                                <div className={`w-0.5 flex-1 my-1 ${
+                                                    isComplete ? 'bg-[#0e6b7a]' : 'bg-gray-100'
+                                                }`} style={{ minHeight: '32px' }} />
+                                            )}
                                         </div>
-                                        {index < STEPS.length - 1 && (
-                                            <div className={`w-0.5 flex-1 my-1 ${
-                                                isComplete ? 'bg-[#0e6b7a]' : 'bg-gray-100'
-                                            }`} style={{ minHeight: '32px' }} />
-                                        )}
-                                    </div>
 
-                                    <div className="pb-8">
-                                        <p className={`font-semibold text-sm ${
-                                            isCurrent ? 'text-[#0e6b7a]' : isComplete ? 'text-[#2d3748]' : 'text-gray-400'
-                                        }`}>
-                                            {STEP_LABELS[step]}
-                                        </p>
-                                        {isCurrent && (
-                                            <p className="text-xs text-gray-400 mt-1">In progress</p>
-                                        )}
+                                        <div className="pb-8">
+                                            <p className={`font-semibold text-sm ${
+                                                isCurrent ? 'text-[#0e6b7a]' : isComplete ? 'text-[#2d3748]' : 'text-gray-400'
+                                            }`}>
+                                                {STEP_LABELS[step]}
+                                            </p>
+                                            {isCurrent && (
+                                                <p className="text-xs text-gray-400 mt-1">In progress</p>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        })}
-                    </div>
+                                )
+                            })}
+                        </div>
+
+                        {order.status === 'awaiting_payment' && (
+                            <button
+                                onClick={() => navigate(`/payment/${orderId}`)}
+                                className="w-full bg-[#0e6b7a] text-white py-4 rounded-2xl font-semibold hover:bg-[#0a5566] transition cursor-pointer text-base"
+                            >
+                                {order.quoted_price ? `Pay $${order.quoted_price}` : 'Pay Now'}
+                            </button>
+                        )}
+                    </>
                 )}
 
             </div>

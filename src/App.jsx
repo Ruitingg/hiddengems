@@ -12,6 +12,7 @@ import CalendarManagementPage from './pages/CalendarManagementPage'
 import OrderFormPage from './pages/OrderFormPage'
 import OrderStatusPage from './pages/OrderStatusPage'
 import OrderDashboardPage from './pages/OrderDashboardPage'
+import PaymentPage from './pages/PaymentPage'
 
 function App() {
   return (
@@ -51,6 +52,11 @@ function App() {
           <Route path="/order-dashboard" element={
             <ProtectedRoute>
               <OrderDashboardPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/payment/:orderId" element={
+            <ProtectedRoute>
+              <PaymentPage />
             </ProtectedRoute>
           } />
         </Routes>
