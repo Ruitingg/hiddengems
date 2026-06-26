@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../lib/AuthContext'
 
-const categories = ['Food', 'Beauty', 'Crafts']
-const areas = ['Tampines', 'Bishan', 'Jurong West', 'Ang Mo Kio', 'Clementi', 'Tiong Bahru']
-
 const SetupPage = () => {
     const { session } = useAuth()
     const navigate = useNavigate()
@@ -91,35 +88,23 @@ const SetupPage = () => {
                     className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
                 />
 
-                <div className="relative">
-                    <select
-                        name="category"
-                        value={form.category}
-                        onChange={handleChange}
-                        className="appearance-none w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white"
-                    >
-                        <option value="">Select a category *</option>
-                        {categories.map(cat => (
-                            <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                    </select>
-                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">▼</span>
-                </div>
+                <input
+                    name="category"
+                    type="text"
+                    placeholder="Category (e.g. Nails, Baking, Crafts) *"
+                    value={form.category}
+                    onChange={handleChange}
+                    className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
+                />
 
-                <div className="relative">
-                    <select
-                        name="area"
-                        value={form.area}
-                        onChange={handleChange}
-                        className="appearance-none w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white"
-                    >
-                        <option value="">Select an area *</option>
-                        {areas.map(area => (
-                            <option key={area} value={area}>{area}</option>
-                        ))}
-                    </select>
-                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">▼</span>
-                </div>
+                <input
+                    name="area"
+                    type="text"
+                    placeholder="Area (e.g. Tampines, Bishan) *"
+                    value={form.area}
+                    onChange={handleChange}
+                    className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] focus:ring-1 focus:ring-[#0e6b7a] bg-white"
+                />
 
                 <textarea
                     name="description"
