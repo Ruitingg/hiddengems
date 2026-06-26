@@ -28,8 +28,14 @@ export const useOrderDashboard = () => {
             }
 
             setHbbId(hbbProfile.id)
+        }
 
-            const { data: ordersData, error: ordersError } = await supabase
-                .from('orders')
-                .select('*, products(name, description, price), users(email)')
-                .eq('hbb_id', hbbProfile.id)
+        fetchData()
+    }, [session])
+
+    const { data: ordersData, error: ordersError } = await supabase
+        .from('orders')
+        .select('*, products(name, description, price), users(email)')
+        .eq('hbb_id', hbbProfile.id)
+
+    }
