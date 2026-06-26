@@ -15,6 +15,7 @@ import OrderDashboardPage from './pages/OrderDashboardPage'
 import PaymentPage from './pages/PaymentPage'
 import ReviewPage from './pages/ReviewPage'
 import ManageBusinessPage from './pages/ManageBusinessPage'
+import AnnouncementsPage from './pages/AnnouncementsPage'
 
 function App() {
   return (
@@ -71,6 +72,12 @@ function App() {
               <ManageBusinessPage />
             </ProtectedRoute>
           } />
+          <Route path="/announcements" element={
+            <ProtectedRoute>
+              <AnnouncementsPage />
+            </ProtectedRoute>
+          } />
+          
         </Routes>
       </Router>
     </AuthProvider>
