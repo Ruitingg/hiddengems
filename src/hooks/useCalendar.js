@@ -63,7 +63,13 @@ const useCalendar = (hbbId) => {
             return { error: 'Batch created but slots could not be added.' }
         }
 
-        setSlots([...slots, ...insertedSlots])
+        const { data: refreshed } = await supabase
+            .from('availability')
+            .select('*')
+            .eq('hbb_id', hbbId)
+            .order('date', { ascending: true })
+
+        if (refreshed) setSlots(refreshed)
         return { success: true }
     }
 
