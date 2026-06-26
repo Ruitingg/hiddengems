@@ -127,4 +127,13 @@ const ReviewPage = () => {
                 <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-[#0e6b7a] text-white py-4 rounded-2xl
+                    className="w-full bg-[#0e6b7a] text-white py-4 rounded-2xl font-semibold hover:bg-[#0a5566] transition cursor-pointer text-base disabled:opacity-50"
+                >
+                    {submitting ? 'Submitting...' : 'Submit Review'}
+                </button>
+            </form>
+        </div>
+    )
+}
+
+export default ReviewPage
