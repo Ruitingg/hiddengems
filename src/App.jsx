@@ -14,6 +14,7 @@ import OrderStatusPage from './pages/OrderStatusPage'
 import OrderDashboardPage from './pages/OrderDashboardPage'
 import PaymentPage from './pages/PaymentPage'
 import ReviewPage from './pages/ReviewPage'
+import ManageBusinessPage from './pages/ManageBusinessPage'
 
 function App() {
   return (
@@ -63,6 +64,11 @@ function App() {
           <Route path="/review/:orderId" element={
             <ProtectedRoute>
               <ReviewPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/manage-business" element={
+            <ProtectedRoute>
+              <ManageBusinessPage />
             </ProtectedRoute>
           } />
         </Routes>
