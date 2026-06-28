@@ -24,7 +24,7 @@ const Navbar = () => {
             </Link>
 
             <div className="flex items-center gap-3">
-                {{session ? (
+                {session ? (
                     <>
                         <span className="text-gray-400 text-sm hidden sm:block">{session.user.email}</span>
                         {role === 'owner' && (
@@ -44,7 +44,7 @@ const Navbar = () => {
                         className="bg-[#0e6b7a] text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-[#0a5566] transition">
                         Log In
                     </Link>
-                ) : null}}
+                ) : null}
             </div>
         </nav>
     )
