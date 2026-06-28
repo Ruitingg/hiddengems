@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useOrderForm } from '../hooks/useOrderForm'
+import AvailabilityCalendar from '../components/AvailabilityCalendar'
 import { supabase } from '../lib/supabaseClient'
 
 const OrderFormPage = () => {
@@ -10,6 +11,7 @@ const OrderFormPage = () => {
 
     const [selectedDate, setSelectedDate] = useState('')
     const [selectedTime, setSelectedTime] = useState('')
+    const [selectedSlotId, setSelectedSlotId] = useState(null)
     const [selectedProductId, setSelectedProductId] = useState(null)
     const [notes, setNotes] = useState('')
     const [submitting, setSubmitting] = useState(false)
@@ -63,10 +65,9 @@ const OrderFormPage = () => {
         const result = await createOrder({
             slotDate: selectedDate,
             slotTime: selectedTime,
-            hbbId,
+            slotId: selectedSlotId, hbbId,
             productIds: [selectedProductId],
-            pricingType: selectedProduct.pricing_type || 'fixed',
-            notes,
+            pricingType: selectedProduct.pricing_type || 'fixed', notes,
             customerId: session.user.id,
         })
 
@@ -116,32 +117,26 @@ const OrderFormPage = () => {
 
                 <div className="mb-6">
                     <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Select Date & Time</h2>
-                    <p className="text-xs text-gray-400 mb-3">
-                        ⚠️ Temporary picker — will be replaced by the availability calendar.
-                    </p>
-                    <div className="flex gap-3">
-                        <input
-                            type="date"
-                            value={selectedDate}
-                            onChange={(e) => handleDateChange(e.target.value)}
-                            className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a]"
-                        />
-                        <input
-                            type="time"
-                            value={selectedTime}
-                            onChange={(e) => setSelectedTime(e.target.value)}
-                            className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a]"
-                        />
-                    </div>
-
-                    {leadTimeWarning && (
-                        <div className="mt-3 bg-amber-50 border border-amber-100 text-amber-700 text-sm px-4 py-3 rounded-xl">
-                            ⚠️ This date doesn't give the business enough notice. Please pick a later date.
+                    <AvailabilityCalendar
+                        hbbId={hbbId}
+                        onSelectSlot={(slot) => {
+                            setSelectedDate(slot.date)
+                            setSelectedTime(slot.start_time)
+                            setSelectedSlotId(slot.id)
+                            if (selectedProduct) {
+                                const ok = checkLeadTime(slot.date, selectedProduct)
+                                setLeadTimeWarning(!ok)
+                            }
+                        }}
+                    />
+                    {selectedDate && selectedTime && (
+                        <div className="mt-3 bg-[#FAFEFE] border border-gray-100 rounded-xl px-4 py-3 text-sm text-[#2d3748]">
+                            Selected: {selectedDate} at {selectedTime}
                         </div>
                     )}
-                    {!leadTimeWarning && selectedDate && selectedProductId && (
-                        <div className="mt-3 bg-green-50 border border-green-100 text-green-700 text-sm px-4 py-3 rounded-xl">
-                            ✓ This slot works — no rush!
+                    {leadTimeWarning && (
+                        <div className="mt-3 bg-amber-50 border border-amber-100 text-amber-700 text-sm px-4 py-3 rounded-xl">
+                            This date doesn't give the business enough notice. Please pick a later date.
                         </div>
                     )}
                 </div>

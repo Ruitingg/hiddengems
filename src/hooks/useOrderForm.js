@@ -44,13 +44,15 @@ export const useOrderForm = (hbbId) => {
         return daysUntilSlot >= leadTimeDays
     }
 
-    const createOrder = async ({ slotDate, slotTime, hbbId, productIds, pricingType, notes, customerId }) => {
+    const createOrder = async ({ slotDate, slotTime, slotId, hbbId, productIds, pricingType, notes, customerId }) => {
+        if (!slotId) {
+            return { error: 'Please select an available slot.' }
+        }
+
         const { data: slot, error: slotError } = await supabase
             .from('availability')
             .select('id')
-            .eq('hbb_id', hbbId)
-            .eq('date', slotDate)
-            .eq('start_time', slotTime)
+            .eq('id', slotId)
             .eq('status', 'available')
             .maybeSingle()
 
