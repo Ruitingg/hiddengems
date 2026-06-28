@@ -31,7 +31,7 @@ export const useOrderDashboard = () => {
 
     const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
-        .select('*, products(name, description, price), users(email)')
+        .select('*, products(name, description, price)')
         .eq('hbb_id', hbbProfile.id)
         .order('created_at', { ascending: false })
 

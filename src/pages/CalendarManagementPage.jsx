@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import useCalendar from '../hooks/useCalendar'
 import useOwnerProfile from '../hooks/useOwnerProfile'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import useSlotCancellation from '../hooks/useSlotCancellation'
 
 const colourOptions = ['#0e6b7a', '#f97316', '#a855f7', '#22c55e', '#ef4444']
 
 const CalendarManagementPage = () => {
+    const navigate = useNavigate()
     const { profile, loading: profileLoading } = useOwnerProfile()
     const { slots, loading, error, createBatch, toggleSlotStatus } = useCalendar(profile?.id)
     const { cancelSlot, loading: cancellationLoading } = useSlotCancellation()
@@ -98,11 +99,20 @@ const CalendarManagementPage = () => {
 
     return (
         <div className="min-h-screen bg-white px-6 py-8 max-w-2xl mx-auto">
-            <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold text-[#2d3748]"
-                    style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                    Manage Availability
-                </h1>
+            <div className="mb-6">
+                <button
+                    onClick={() => navigate('/dashboard')}
+                    className="flex items-center gap-1 text-gray-400 hover:text-[#0e6b7a] mb-4 text-sm transition"
+                >
+                    ← Back to Dashboard
+                </button>
+                <div className="flex items-center justify-between">
+                    <h1 className="text-2xl font-bold text-[#2d3748]"
+                        style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                        Manage Availability
+                    </h1>
+                </div>
+
                 <button
                     onClick={() => setShowForm(!showForm)}
                     className="bg-[#0e6b7a] text-white px-4 py-2 rounded-full text-sm font-medium"
@@ -110,6 +120,7 @@ const CalendarManagementPage = () => {
                     + Create Batch
                 </button>
             </div>
+        </div>
 
             {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 

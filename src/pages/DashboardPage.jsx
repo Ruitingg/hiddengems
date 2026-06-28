@@ -10,7 +10,7 @@ const DashboardPage = () => {
                 <p className="text-gray-400 text-sm mb-1">Owner Dashboard</p>
                 <h1 className="text-[#2d3748] text-2xl font-bold"
                     style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                    Welcome back! 👋
+                    Welcome back!
                 </h1>
                 <p className="text-gray-400 text-sm mt-1">Manage your business below.</p>
             </div>

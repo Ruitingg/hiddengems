@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../lib/AuthContext'
 import DiamondIcon from './DiamondIcon'
@@ -6,6 +6,7 @@ import DiamondIcon from './DiamondIcon'
 const Navbar = () => {
     const { session, role } = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
@@ -23,7 +24,7 @@ const Navbar = () => {
             </Link>
 
             <div className="flex items-center gap-3">
-                {!session ? (
+                {!session && location.pathname !== '/auth' ? (
                     <Link to="/auth"
                         className="bg-[#0e6b7a] text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-[#0a5566] transition">
                         Log In

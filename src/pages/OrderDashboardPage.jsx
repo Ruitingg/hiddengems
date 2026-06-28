@@ -133,7 +133,7 @@ const OrderDashboardPage = () => {
                                         <p className="font-semibold text-[#2d3748] text-sm">
                                             {order.products?.name || 'Item'}
                                         </p>
-                                        <p className="text-xs text-gray-400">{order.users?.email}</p>
+                                        <p className="text-xs text-gray-400">Order #{order.id.slice(0, 8)}</p>
                                     </div>
                                     <p className="text-xs text-gray-400">#{order.id.slice(0, 8)}</p>
                                 </div>
