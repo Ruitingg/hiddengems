@@ -1,8 +1,9 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import useOwnerProfile from '../hooks/useOwnerProfile'
 
 const DashboardPage = () => {
     const navigate = useNavigate()
+    const { profile } = useOwnerProfile()
 
     return (
         <div className="min-h-screen bg-white">
@@ -41,6 +42,19 @@ const DashboardPage = () => {
                         </div>
                         <p className="text-sm text-gray-400 ml-9">Edit profile, menu items, and fulfilment options</p>
                     </button>
+
+                    {profile && (
+                        <button
+                            onClick={() => navigate(`/profile/${profile.id}`)}
+                            className="bg-white rounded-2xl px-6 py-5 border border-gray-100 shadow-sm text-left hover:shadow-md hover:-translate-y-0.5 transition cursor-pointer"
+                        >
+                        <div className="flex items-center gap-3 mb-1">
+                            <span className="text-2xl">👁️</span>
+                            <h2 className="font-bold text-[#2d3748]">View My Business Profile</h2>
+                        </div>
+                        <p className="text-sm text-gray-400 ml-9">See your profile as customers see it</p>
+                    </button>
+                )}
 
                     <button
                         onClick={() => navigate('/announcements')}
