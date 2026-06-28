@@ -165,7 +165,8 @@ const ProfilePage = () => {
                                         <span className="text-sm">
                                             {'⭐'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
                                         </span>
-                                        <span className="text-xs text-gray-400">{review.users?.email}</span>
+                                        <span className="text-xs text-gray-400">{review.public_profiles?.username || 'Anonymous'}</span>
+                                        
                                     </div>
                                     {review.comment && (
                                         <p className="text-sm text-[#4b5563] mt-1">{review.comment}</p>

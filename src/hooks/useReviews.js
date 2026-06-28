@@ -11,7 +11,7 @@ export const useReviewsForHbb = (hbbId) => {
         const fetchReviews = async () => {
             const { data } = await supabase
                 .from('reviews')
-                .select('*, users(email)')
+                .select('*, users(username)')
                 .eq('hbb_id', hbbId)
                 .order('created_at', { ascending: false })
             setReviews(data || [])
