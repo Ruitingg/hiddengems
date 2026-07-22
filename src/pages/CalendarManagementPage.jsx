@@ -33,30 +33,54 @@ const CalendarManagementPage = () => {
     }
 
     const handleCreateBatch = async (e) => {
-        e.preventDefault()
-        setFormError('')
+    e.preventDefault()
+    setFormError('')
 
-        const validDateTimes = dateTimes.filter((dt) => dt.date && dt.time)
-        if (validDateTimes.length === 0) {
-            setFormError('Please add at least one valid date and time.')
-            return
-        }
-        if (!releaseTime) {
-            setFormError('Please set a release time.')
-            return
-        }
-
-        const result = await createBatch(validDateTimes, releaseTime, colourTag, notes)
-        if (result.error) {
-            setFormError(result.error)
-            return
-        }
-
-        setShowForm(false)
-        setDateTimes([{ date: '', time: '' }])
-        setReleaseTime('')
-        setNotes('')
+    const validDateTimes = dateTimes.filter((dt) => dt.date && dt.time)
+    if (validDateTimes.length === 0) {
+        setFormError('Please add at least one valid date and time.')
+        return
     }
+    if (!releaseTime) {
+        setFormError('Please set a release time.')
+        return
+    }
+
+    const now = new Date()
+
+    const hasPastDate = validDateTimes.some((dt) => {
+        const slotDateTime = new Date(`${dt.date}T${dt.time}`)
+        return slotDateTime <= now
+    })
+    if (hasPastDate) {
+        setFormError('Slot dates and times must be in the future.')
+        return
+    }
+
+    const releaseTimeDate = new Date(releaseTime)
+    const earliestSlot = validDateTimes.reduce((earliest, dt) => {
+        const slotDateTime = new Date(`${dt.date}T${dt.time}`)
+        return slotDateTime < earliest ? slotDateTime : earliest
+    }, new Date(`${validDateTimes[0].date}T${validDateTimes[0].time}`))
+
+    if (releaseTimeDate > earliestSlot) {
+        setFormError('Release time must be before the earliest slot date and time.')
+        return
+    }
+
+    const releaseTimeUTC = releaseTimeDate.toISOString()
+
+    const result = await createBatch(validDateTimes, releaseTimeUTC, colourTag, notes)
+    if (result.error) {
+        setFormError(result.error)
+        return
+    }
+
+    setShowForm(false)
+    setDateTimes([{ date: '', time: '' }])
+    setReleaseTime('')
+    setNotes('')
+}
 
     const handleCancelSlot = async () => {
         setCancelError('')
