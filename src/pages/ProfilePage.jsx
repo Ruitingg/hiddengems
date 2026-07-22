@@ -10,6 +10,7 @@ const ProfilePage = () => {
     const [hbb, setHbb] = useState(null)
     const [products, setProducts] = useState([])
     const [portfolio, setPortfolio] = useState([])
+    const [isOwner, setIsOwner] = useState(false)
     const [loading, setLoading] = useState(true)
     const { reviews, loading: reviewsLoading } = useReviewsForHbb(id)
 
@@ -31,6 +32,11 @@ const ProfilePage = () => {
                 .select('*')
                 .eq('hbb_id', id)
 
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session && hbbData && session.user.id === hbbData.owner_id) {
+                setIsOwner(true)
+            }
+
             setHbb(hbbData)
             setProducts(productsData || [])
             setPortfolio(portfolioData || [])
@@ -38,6 +44,10 @@ const ProfilePage = () => {
         }
         fetchData()
     }, [id])
+
+    const handleBack = () => {
+        navigate(isOwner ? '/dashboard' : '/discover')
+    }
 
     if (loading) {
         return (
@@ -60,7 +70,7 @@ const ProfilePage = () => {
 
             <div className="bg-[#FAFEFE] px-6 pt-6 pb-8 border-b border-gray-100">
                 <button
-                    onClick={() => navigate('/discover')}
+                    onClick={handleBack}
                     className="flex items-center gap-1 text-gray-400 hover:text-[#0e6b7a] mb-4 text-sm transition"
                 >
                     ← Back
