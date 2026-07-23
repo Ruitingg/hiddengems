@@ -105,7 +105,7 @@ const OrderStatusPage = () => {
                                 onClick={() => navigate(`/payment/${orderId}`)}
                                 className="w-full bg-[#0e6b7a] text-white py-4 rounded-2xl font-semibold hover:bg-[#0a5566] transition cursor-pointer text-base"
                             >
-                                {order.quoted_price ? `Pay $${order.quoted_price}` : 'Pay Now'}
+                                Pay ${order.final_price ?? 0}
                             </button>
                         )}
 
