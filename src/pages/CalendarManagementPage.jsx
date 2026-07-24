@@ -40,23 +40,26 @@ const CalendarManagementPage = () => {
         if (validDateTimes.length === 0) {
             setFormError('Please add at least one valid date and time.')
             return
-        }
-        if (!releaseTime) {
-            setFormError('Please set a release time.')
-            return
-        }
-
-        const result = await createBatch(validDateTimes, releaseTime, colourTag, notes)
-        if (result.error) {
-            setFormError(result.error)
-            return
-        }
-
-        setShowForm(false)
-        setDateTimes([{ date: '', time: '' }])
-        setReleaseTime('')
-        setNotes('')
     }
+
+    if (!releaseTime) {
+        setFormError('Please set a release time.')
+        return
+    }
+
+    const releaseTimeUTC = new Date(releaseTime).toISOString()
+
+    const result = await createBatch(validDateTimes, releaseTimeUTC, colourTag, notes)
+    if (result.error) {
+        setFormError(result.error)
+        return
+    }
+
+    setShowForm(false)
+    setDateTimes([{ date: '', time: '' }])
+    setReleaseTime('')
+    setNotes('')
+}
 
     const handleCancelSlot = async () => {
         setCancelError('')
