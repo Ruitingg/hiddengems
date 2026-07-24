@@ -54,8 +54,7 @@ const PaymentPage = () => {
         )
     }
 
-    const amount = order.quoted_price ?? order.products?.price ?? 0
-
+    const amount = order.final_price ?? 0
     return (
         <div className="min-h-screen bg-white">
 

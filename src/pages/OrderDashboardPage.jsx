@@ -38,7 +38,7 @@ const OrderDashboardPage = () => {
             .update({ status: 'completed' })
             .eq('id', order.id)
 
-        const amountSpent = order.quoted_price ?? order.products?.price ?? 0
+        const amountSpent = order.final_price ?? order.products?.price ?? 0
         const pointsToAward = Math.round(amountSpent)
 
         const { data: existingPoints } = await supabase
@@ -164,7 +164,7 @@ const OrderDashboardPage = () => {
                                 {activeTab === 'awaiting' && (
                                     <div className="bg-[#FAFEFE] rounded-xl px-3 py-2 mt-2">
                                         <p className="text-sm font-semibold text-[#0e6b7a]">
-                                            Quoted: ${order.quoted_price}
+                                            Quoted: ${order.final_price}
                                         </p>
                                         <p className="text-xs text-gray-400">Waiting for customer payment</p>
                                     </div>

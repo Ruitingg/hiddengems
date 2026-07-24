@@ -62,6 +62,9 @@ export const useOrderForm = (hbbId) => {
 
         const initialStatus = pricingType === 'fixed' ? 'awaiting_payment' : 'pending'
 
+        const selectedProduct = products.find((p) => p.id === productIds[0])
+        const finalPrice = pricingType === 'fixed' ? selectedProduct?.price ?? null : null
+
         const { data: order, error: orderError } = await supabase
             .from('orders')
             .insert({
@@ -72,6 +75,8 @@ export const useOrderForm = (hbbId) => {
                 pricing_type: pricingType,
                 status: initialStatus,
                 order_notes: notes,
+                final_price: finalPrice,
+                total: finalPrice,
             })
             .select()
             .single()

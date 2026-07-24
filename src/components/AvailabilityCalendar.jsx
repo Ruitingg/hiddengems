@@ -47,6 +47,7 @@ const AvailabilityCalendar = ({ hbbId, onSelectSlot }) => {
                 {dates.map((date) => (
                     <button
                         key={date}
+                        type="button"
                         onClick={() => setSelectedDate(date)}
                         className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border ${
                             selectedDate === date
@@ -76,6 +77,7 @@ const AvailabilityCalendar = ({ hbbId, onSelectSlot }) => {
                         return (
                             <button
                                 key={slot.id}
+                                type="button"
                                 disabled={slot.status === 'booked'}
                                 onClick={() => onSelectSlot && onSelectSlot(slot)}
                                 className={`px-4 py-2 rounded-xl text-sm font-medium ${colour} ${

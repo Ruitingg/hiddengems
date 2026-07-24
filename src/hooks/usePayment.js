@@ -30,7 +30,7 @@ export const usePayment = (orderId) => {
     const simulatePayment = async () => {
         const { error: payError } = await supabase
             .from('orders')
-            .update({ status: 'paid', paid_at: new Date().toISOString() })
+            .update({ status: 'paid', updated_at: new Date().toISOString() })
             .eq('id', orderId)
 
         if (payError) {
