@@ -2,10 +2,23 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import DiamondIcon from './DiamondIcon'
 
-const HBBCard = ({ hbb }) => {
+const HBBCard = ({ hbb, isFavourite, onToggleFavourite }) => {
+    const handleHeartClick = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        onToggleFavourite(hbb.id)
+    }
+
     return (
         <Link to={`/profile/${hbb.id}`} className="block">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden relative">
+
+                <button
+                    onClick={handleHeartClick}
+                    className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-sm"
+                >
+                    <span className="text-lg">{isFavourite ? '❤️' : '🤍'}</span>
+                </button>
 
                 <div className="w-full h-44 bg-[#FAFEFE] flex items-center justify-center">
                     <span className="text-gray-300 text-sm">No photo yet</span>

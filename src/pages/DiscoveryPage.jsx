@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import HBBCard from '../components/HBBCard'
 import { supabase } from '../lib/supabaseClient'
 import DiamondIcon from '../components/DiamondIcon'
+import { useFavourites } from '../hooks/useRelations'
 
 const categories = ['All', 'Food', 'Beauty', 'Crafts']
 const areas = ['All Areas', 'Tampines', 'Bishan', 'Jurong West', 'Ang Mo Kio', 'Clementi', 'Tiong Bahru']
@@ -12,6 +13,7 @@ const DiscoveryPage = () => {
     const [activeCategory, setActiveCategory] = useState('All')
     const [activeArea, setActiveArea] = useState('All Areas')
     const [searchQuery, setSearchQuery] = useState('')
+    const { favouriteIds, toggleFavourite } = useFavourites()
 
     useEffect(() => {
         const fetchHBBs = async () => {
@@ -112,7 +114,12 @@ const DiscoveryPage = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {filteredHBBs.map((hbb) => (
-                            <HBBCard key={hbb.id} hbb={hbb} />
+                            <HBBCard
+                                key={hbb.id}
+                                hbb={hbb}
+                                isFavourite={favouriteIds.includes(hbb.id)}
+                                onToggleFavourite={toggleFavourite}
+                            />
                         ))}
                     </div>
                 )}
