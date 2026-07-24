@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import DiamondIcon from '../components/DiamondIcon'
 import { useReviewsForHbb } from '../hooks/useReviews'
+import { useFollow } from '../hooks/useRelations'
 
 const ProfilePage = () => {
     const { id } = useParams()
@@ -10,8 +11,11 @@ const ProfilePage = () => {
     const [hbb, setHbb] = useState(null)
     const [products, setProducts] = useState([])
     const [portfolio, setPortfolio] = useState([])
+    const [isOwner, setIsOwner] = useState(false)
     const [loading, setLoading] = useState(true)
     const { reviews, loading: reviewsLoading } = useReviewsForHbb(id)
+    const { isFollowing, toggleFollow } = useFollow(id)
+    const [followMsg, setFollowMsg] = useState('')
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +35,11 @@ const ProfilePage = () => {
                 .select('*')
                 .eq('hbb_id', id)
 
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session && hbbData && session.user.id === hbbData.owner_id) {
+                setIsOwner(true)
+            }
+
             setHbb(hbbData)
             setProducts(productsData || [])
             setPortfolio(portfolioData || [])
@@ -38,6 +47,17 @@ const ProfilePage = () => {
         }
         fetchData()
     }, [id])
+
+    const handleBack = () => {
+        navigate(isOwner ? '/dashboard' : '/discover')
+    }
+
+    const handleFollowClick = async () => {
+        const result = await toggleFollow()
+        if (result.error) {
+            setFollowMsg(result.error)
+        }
+    }
 
     if (loading) {
         return (
@@ -60,7 +80,7 @@ const ProfilePage = () => {
 
             <div className="bg-[#FAFEFE] px-6 pt-6 pb-8 border-b border-gray-100">
                 <button
-                    onClick={() => navigate('/discover')}
+                    onClick={handleBack}
                     className="flex items-center gap-1 text-gray-400 hover:text-[#0e6b7a] mb-4 text-sm transition"
                 >
                     ← Back
@@ -88,12 +108,27 @@ const ProfilePage = () => {
                     </div>
                     <div className="text-right">
                         <p className="text-gray-400 text-xs mb-1">Charm Score</p>
-                        <div className="flex items-center justify-end gap-1 text-[#0e6b7a] font-bold text-lg">
+                        <div className="flex items-center justify-end gap-1 text-[#0e6b7a] font-bold text-lg mb-3">
                             <DiamondIcon size={16} color="#0e6b7a" />
                             {hbb.charm_score > 0 ? hbb.charm_score : 'New'}
                         </div>
+                        {!isOwner && (
+                            <button
+                                onClick={handleFollowClick}
+                                className={`px-4 py-1.5 rounded-full text-xs font-medium transition ${
+                                    isFollowing
+                                        ? 'bg-[#0e6b7a] text-white'
+                                        : 'bg-white text-[#0e6b7a] border border-[#0e6b7a]'
+                                }`}
+                            >
+                                {isFollowing ? 'Following' : '+ Follow'}
+                            </button>
+                        )}
                     </div>
                 </div>
+                {followMsg && (
+                    <p className="text-xs text-red-400 mt-2 text-right">{followMsg}</p>
+                )}
             </div>
 
             <div className="px-6 py-6 max-w-3xl mx-auto">
