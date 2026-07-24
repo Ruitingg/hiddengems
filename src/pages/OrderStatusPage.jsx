@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useOrderStatus } from '../hooks/useOrderStatus'
+import useSlotCancellation from '../hooks/useSlotCancellation'
 
 const STEPS = ['pending', 'awaiting_payment', 'paid', 'confirmed', 'completed']
 
@@ -15,6 +17,28 @@ const OrderStatusPage = () => {
     const { orderId } = useParams()
     const navigate = useNavigate()
     const { order, loading } = useOrderStatus(orderId)
+    const { cancelSlot, loading: cancelling } = useSlotCancellation()
+    const [showCancelForm, setShowCancelForm] = useState(false)
+    const [cancelReason, setCancelReason] = useState('')
+    const [cancelError, setCancelError] = useState('')
+
+    const handleCancelOrder = async () => {
+        setCancelError('')
+
+        if (!cancelReason.trim()) {
+            setCancelError('Please provide a reason for cancellation.')
+            return
+        }
+
+        const result = await cancelSlot(order.slot_id, cancelReason)
+        if (result.error) {
+            setCancelError(result.error)
+            return
+        }
+
+        setShowCancelForm(false)
+        setCancelReason('')
+    }
 
     if (loading) {
         return (
@@ -33,6 +57,7 @@ const OrderStatusPage = () => {
     }
 
     const isCancelled = order.status === 'cancelled'
+    const isCompleted = order.status === 'completed'
     const currentStepIndex = STEPS.indexOf(order.status)
 
     return (
@@ -117,10 +142,62 @@ const OrderStatusPage = () => {
                                 ⭐ Leave a Review
                             </button>
                         )}
+
+                        {!isCompleted && (
+                            <button
+                                onClick={() => setShowCancelForm(true)}
+                                className="w-full mt-3 text-red-500 text-sm font-medium underline"
+                            >
+                                Cancel Order
+                            </button>
+                        )}
                     </>
                 )}
 
             </div>
+
+            {showCancelForm && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-6 z-50">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm">
+                        <h2 className="font-bold text-[#2d3748] mb-2">Cancel this order?</h2>
+                        <p className="text-sm text-gray-400 mb-4">This cannot be undone.</p>
+
+                        {cancelError && (
+                            <div className="bg-red-50 border border-red-100 text-red-400 text-sm px-4 py-3 rounded-xl mb-4">
+                                {cancelError}
+                            </div>
+                        )}
+
+                        <textarea
+                            placeholder="Reason for cancellation"
+                            value={cancelReason}
+                            onChange={(e) => setCancelReason(e.target.value)}
+                            rows={3}
+                            className="border border-gray-200 rounded-xl px-3 py-2 text-sm w-full mb-4 resize-none"
+                        />
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => {
+                                    setShowCancelForm(false)
+                                    setCancelReason('')
+                                    setCancelError('')
+                                }}
+                                className="flex-1 bg-[#FAFEFE] border border-gray-200 text-gray-600 py-3 rounded-xl text-sm font-medium"
+                            >
+                                Go Back
+                            </button>
+                            <button
+                                onClick={handleCancelOrder}
+                                disabled={cancelling}
+                                className="flex-1 bg-red-500 text-white py-3 rounded-xl text-sm font-medium disabled:opacity-50"
+                            >
+                                {cancelling ? 'Cancelling...' : 'Confirm Cancellation'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
