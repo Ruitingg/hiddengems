@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { notifyFollowers } from './useNotifications'
 
 const useAnnouncements = (hbbId) => {
     const [posts, setPosts] = useState([])
@@ -40,6 +41,19 @@ const useAnnouncements = (hbbId) => {
 
         if (error) return { error: 'Could not create announcement.' }
         setPosts([data, ...posts])
+
+        const { data: hbbData } = await supabase
+            .from('hbb_profiles')
+            .select('name')
+            .eq('id', hbbId)
+            .single()
+
+        await notifyFollowers(
+            hbbId,
+            'announcement',
+            `${hbbData?.name || 'A business you follow'} posted a new announcement: ${content.slice(0, 60)}${content.length > 60 ? '...' : ''}`
+        )
+
         return { success: true }
     }
 
@@ -69,6 +83,19 @@ const useAnnouncements = (hbbId) => {
 
         if (error) return { error: 'Could not create story.' }
         setPosts([data, ...posts])
+
+        const { data: hbbData } = await supabase
+            .from('hbb_profiles')
+            .select('name')
+            .eq('id', hbbId)
+            .single()
+
+        await notifyFollowers(
+            hbbId,
+            'story',
+            `${hbbData?.name || 'A business you follow'} posted a new story.`
+        )
+
         return { success: true }
     }
 

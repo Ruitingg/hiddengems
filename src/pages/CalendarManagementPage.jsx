@@ -40,6 +40,11 @@ const CalendarManagementPage = () => {
     if (validDateTimes.length === 0) {
         setFormError('Please add at least one valid date and time.')
         return
+
+        const validDateTimes = dateTimes.filter((dt) => dt.date && dt.time)
+        if (validDateTimes.length === 0) {
+            setFormError('Please add at least one valid date and time.')
+            return
     }
     if (!releaseTime) {
         setFormError('Please set a release time.')
@@ -69,6 +74,25 @@ const CalendarManagementPage = () => {
     }
 
     const releaseTimeUTC = releaseTimeDate.toISOString()
+
+    const result = await createBatch(validDateTimes, releaseTimeUTC, colourTag, notes)
+    if (result.error) {
+        setFormError(result.error)
+        return
+    }
+
+    setShowForm(false)
+    setDateTimes([{ date: '', time: '' }])
+    setReleaseTime('')
+    setNotes('')
+}
+
+    if (!releaseTime) {
+        setFormError('Please set a release time.')
+        return
+    }
+
+    const releaseTimeUTC = new Date(releaseTime).toISOString()
 
     const result = await createBatch(validDateTimes, releaseTimeUTC, colourTag, notes)
     if (result.error) {
