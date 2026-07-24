@@ -3,8 +3,9 @@ import { useNavigate, Navigate } from 'react-router-dom'
 import useOwnerProfile from '../hooks/useOwnerProfile'
 import useMenu from '../hooks/useMenu'
 import useFulfilmentOptions from '../hooks/useFulfilmentOptions'
+import { usePortfolio } from '../hooks/usePortfolio'
 
-const TABS = ['Profile', 'Menu', 'Fulfilment']
+const TABS = ['Profile', 'Menu', 'Fulfilment', 'Portfolio']
 
 const FULFILMENT_LABELS = {
     self_collection: 'Self Collection',
@@ -18,6 +19,7 @@ const ManageBusinessPage = () => {
     const { profile, loading: profileLoading, updateProfile } = useOwnerProfile()
     const { items, addItem, deleteItem } = useMenu(profile?.id)
     const { options, enableOption, updateFee, disableOption, FULFILMENT_OPTIONS } = useFulfilmentOptions(profile?.id)
+    const { items: portfolioItems, uploadPhoto, deleteItem: deletePortfolioItem } = usePortfolio(profile?.id)
 
     const [activeTab, setActiveTab] = useState('Profile')
 
@@ -31,6 +33,11 @@ const ManageBusinessPage = () => {
 
     const [feeInputs, setFeeInputs] = useState({})
     const [feeSaving, setFeeSaving] = useState(null)
+
+    const [portfolioFile, setPortfolioFile] = useState(null)
+    const [portfolioCaption, setPortfolioCaption] = useState('')
+    const [portfolioUploading, setPortfolioUploading] = useState(false)
+    const [portfolioError, setPortfolioError] = useState('')
 
     if (profileLoading) {
         return (
@@ -92,6 +99,28 @@ const ManageBusinessPage = () => {
             await updateFee(optionId, parseFloat(fee) || 0)
         }
         setFeeSaving(null)
+    }
+
+    const handlePortfolioUpload = async (e) => {
+        e.preventDefault()
+        setPortfolioError('')
+
+        if (!portfolioFile) {
+            setPortfolioError('Please choose a photo first.')
+            return
+        }
+
+        setPortfolioUploading(true)
+        const result = await uploadPhoto(portfolioFile, portfolioCaption)
+        setPortfolioUploading(false)
+
+        if (result.error) {
+            setPortfolioError(result.error)
+            return
+        }
+
+        setPortfolioFile(null)
+        setPortfolioCaption('')
     }
 
     return (
@@ -351,6 +380,61 @@ const ManageBusinessPage = () => {
                                 </div>
                             )
                         })}
+                    </div>
+                )}
+
+                {activeTab === 'Portfolio' && (
+                    <div className="max-w-lg pb-10">
+                        <div className="grid grid-cols-2 gap-3 mb-4">
+                            {portfolioItems.length === 0 ? (
+                                <p className="text-sm text-gray-400 col-span-2">No photos yet.</p>
+                            ) : (
+                                portfolioItems.map((item) => (
+                                    <div key={item.id} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+                                        <img
+                                            src={item.photo_url}
+                                            alt={item.caption}
+                                            className="w-full h-32 object-cover"
+                                        />
+                                        <div className="p-2">
+                                            <p className="text-xs text-gray-400 truncate">{item.caption}</p>
+                                            <button
+                                                onClick={() => deletePortfolioItem(item.id)}
+                                                className="text-xs text-red-400 mt-1 underline"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        <form onSubmit={handlePortfolioUpload} className="bg-[#FAFEFE] border border-gray-100 rounded-2xl p-4 flex flex-col gap-3">
+                            {portfolioError && (
+                                <p className="text-red-400 text-sm">{portfolioError}</p>
+                            )}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setPortfolioFile(e.target.files[0])}
+                                className="text-sm text-[#2d3748]"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Caption (optional)"
+                                value={portfolioCaption}
+                                onChange={(e) => setPortfolioCaption(e.target.value)}
+                                className="border border-gray-200 rounded-xl px-3 py-2 text-sm"
+                            />
+                            <button
+                                type="submit"
+                                disabled={portfolioUploading}
+                                className="bg-[#0e6b7a] text-white py-2 rounded-xl text-sm font-medium disabled:opacity-50"
+                            >
+                                {portfolioUploading ? 'Uploading...' : 'Upload Photo'}
+                            </button>
+                        </form>
                     </div>
                 )}
             </div>
