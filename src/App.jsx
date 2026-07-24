@@ -16,6 +16,7 @@ import PaymentPage from './pages/PaymentPage'
 import ReviewPage from './pages/ReviewPage'
 import ManageBusinessPage from './pages/ManageBusinessPage'
 import AnnouncementsPage from './pages/AnnouncementsPage'
+import FavouritesPage from './pages/FavouritesPage'
 
 function App() {
   return (
@@ -77,11 +78,16 @@ function App() {
               <AnnouncementsPage />
             </ProtectedRoute>
           } />
-          
+          <Route path="/favourites" element={
+            <ProtectedRoute>
+              <FavouritesPage />
+            </ProtectedRoute>
+          } />
+
         </Routes>
       </Router>
     </AuthProvider>
   )
 }
 
-export default App
+export default App 

@@ -33,6 +33,12 @@ const Navbar = () => {
                                 My Dashboard
                             </Link>
                         )}
+                        {role === 'customer' && (
+                            <Link to="/favourites"
+                                className="text-[#0e6b7a] text-sm font-medium hover:underline">
+                                Favourites
+                            </Link>
+                        )}
                         <button
                             onClick={handleLogout}
                             className="bg-[#FAFEFE] text-gray-600 border border-gray-200 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition">
