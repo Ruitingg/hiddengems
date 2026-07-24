@@ -16,6 +16,8 @@ import PaymentPage from './pages/PaymentPage'
 import ReviewPage from './pages/ReviewPage'
 import ManageBusinessPage from './pages/ManageBusinessPage'
 import AnnouncementsPage from './pages/AnnouncementsPage'
+import FavouritesPage from './pages/FavouritesPage'
+import NotificationsPage from './pages/NotificationsPage'
 
 function App() {
   return (
@@ -77,7 +79,17 @@ function App() {
               <AnnouncementsPage />
             </ProtectedRoute>
           } />
-          
+          <Route path="/favourites" element={
+            <ProtectedRoute>
+              <FavouritesPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/notifications" element={
+            <ProtectedRoute>
+              <NotificationsPage />
+            </ProtectedRoute>
+          } />
+
         </Routes>
       </Router>
     </AuthProvider>
