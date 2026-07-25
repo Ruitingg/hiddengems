@@ -11,6 +11,8 @@ const ProfilePage = () => {
     const [hbb, setHbb] = useState(null)
     const [products, setProducts] = useState([])
     const [portfolio, setPortfolio] = useState([])
+    const [stories, setStories] = useState([])
+    const [activeStory, setActiveStory] = useState(null)
     const [isOwner, setIsOwner] = useState(false)
     const [loading, setLoading] = useState(true)
     const { reviews, loading: reviewsLoading } = useReviewsForHbb(id)
@@ -35,6 +37,13 @@ const ProfilePage = () => {
                 .select('*')
                 .eq('hbb_id', id)
 
+            const { data: storiesData } = await supabase
+                .from('posts')
+                .select('*')
+                .eq('hbb_id', id)
+                .eq('type', 'story')
+                .order('created_at', { ascending: false })
+
             const { data: { session } } = await supabase.auth.getSession()
             if (session && hbbData && session.user.id === hbbData.owner_id) {
                 setIsOwner(true)
@@ -43,6 +52,7 @@ const ProfilePage = () => {
             setHbb(hbbData)
             setProducts(productsData || [])
             setPortfolio(portfolioData || [])
+            setStories(storiesData || [])
             setLoading(false)
         }
         fetchData()
@@ -130,6 +140,32 @@ const ProfilePage = () => {
                     <p className="text-xs text-red-400 mt-2 text-right">{followMsg}</p>
                 )}
             </div>
+
+            {stories.length > 0 && (
+                <div className="px-6 pt-5 pb-2 border-b border-gray-100">
+                    <h2 className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-3">Stories</h2>
+                    <div className="flex gap-3 overflow-x-auto pb-2">
+                        {stories.map((story) => (
+                            <button
+                                key={story.id}
+                                onClick={() => setActiveStory(story)}
+                                className="flex-shrink-0 w-20"
+                            >
+                                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#0e6b7a] p-0.5">
+                                    <img
+                                        src={story.photo_url}
+                                        alt={story.content || 'Story'}
+                                        className="w-full h-full object-cover rounded-full"
+                                    />
+                                </div>
+                                {story.content && (
+                                    <p className="text-xs text-gray-400 mt-1 truncate">{story.content}</p>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div className="px-6 py-6 max-w-3xl mx-auto">
 
@@ -220,6 +256,30 @@ const ProfilePage = () => {
                 </button>
 
             </div>
+
+            {activeStory && (
+                <div
+                    className="fixed inset-0 bg-black/80 flex items-center justify-center px-6 z-50"
+                    onClick={() => setActiveStory(null)}
+                >
+                    <div className="max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+                        <img
+                            src={activeStory.photo_url}
+                            alt={activeStory.content || 'Story'}
+                            className="w-full rounded-2xl mb-3"
+                        />
+                        {activeStory.content && (
+                            <p className="text-white text-sm text-center">{activeStory.content}</p>
+                        )}
+                        <button
+                            onClick={() => setActiveStory(null)}
+                            className="mt-4 mx-auto block text-white/70 text-sm underline"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
