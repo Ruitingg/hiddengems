@@ -12,7 +12,7 @@ export const usePayment = (orderId) => {
         const fetchOrder = async () => {
             const { data, error: fetchError } = await supabase
                 .from('orders')
-                .select('*, products(name, price), hbb_profiles(name)')
+                .select('*, products(name, price), hbb_profiles(name, paynow_number)')
                 .eq('id', orderId)
                 .single()
 
