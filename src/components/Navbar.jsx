@@ -2,11 +2,13 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../lib/AuthContext'
 import DiamondIcon from './DiamondIcon'
+import { useNotifications } from '../hooks/useNotifications'
 
 const Navbar = () => {
     const { session, role } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
+    const { unreadCount } = useNotifications()
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
@@ -39,6 +41,14 @@ const Navbar = () => {
                                 Favourites
                             </Link>
                         )}
+                        <Link to="/notifications" className="relative">
+                            <span className="text-xl">🔔</span>
+                            {unreadCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                                    {unreadCount > 9 ? '9+' : unreadCount}
+                                </span>
+                            )}
+                        </Link>
                         <button
                             onClick={handleLogout}
                             className="bg-[#FAFEFE] text-gray-600 border border-gray-200 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition">
@@ -56,4 +66,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Navbar 

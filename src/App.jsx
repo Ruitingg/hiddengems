@@ -17,6 +17,7 @@ import ReviewPage from './pages/ReviewPage'
 import ManageBusinessPage from './pages/ManageBusinessPage'
 import AnnouncementsPage from './pages/AnnouncementsPage'
 import FavouritesPage from './pages/FavouritesPage'
+import NotificationsPage from './pages/NotificationsPage'
 
 function App() {
   return (
@@ -83,6 +84,11 @@ function App() {
               <FavouritesPage />
             </ProtectedRoute>
           } />
+          <Route path="/notifications" element={
+            <ProtectedRoute>
+              <NotificationsPage />
+            </ProtectedRoute>
+          } />
 
         </Routes>
       </Router>
@@ -90,4 +96,4 @@ function App() {
   )
 }
 
-export default App 
+export default App
