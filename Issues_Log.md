@@ -38,3 +38,35 @@ Found while working on: In-App Ordering Flow (owner dashboard)
 What happened: OrderDashboardPage.jsx referenced the same missing quoted_price column found earlier in the customer-facing files. Caused "Quoted: $" to load with no amount on the Awaiting Payment tab, and , caused Gem Points to be calculated from the product's list price instead of the actual final_price when an order was marked completed.
 Fix: Swapped both references from order.quoted_price to order.final_price.
 Commit: fix: use final_price instead of nonexistent quoted_price in dashboard
+
+### 24 Jul 2026 — Added PayNow QR code generation
+Found while working on: Payment & PayNow
+What happened: MS2 had manual PayNow number entry only. Added a paynow_number field to hbb_profiles, an input for owners to set it on their business profile, and a QR code (via qrcode.react) on the payment page encoding "PayNow to {number} for Order #{id}". Falls back to a message if the business hasn't set a PayNow number yet.
+Fix: Added paynow_number column via ALTER TABLE; added the input to ManageBusinessPage.jsx; updated usePayment.js to fetch the field; added QR display to PaymentPage.jsx.
+Commit: feat: add PayNow number field to business profile
+Commit: feat: add PayNow QR code generation on payment page
+
+### 24 Jul 2026 — Added gem points redemption, missing UPDATE policy on points table
+Found while working on: Payment & PayNow
+What happened: Built discount-only gem redemption (owner sets gems per dollar rate on hbb_profiles, customer can redeem at checkout for both Fixed Price and Quote Required orders). Redemption UI and discount calculation worked correctly, but gem balance never actually deducted after payment. 
+Root cause: no UPDATE policy existed on the points table, so the customer's own update to their balance silently failed under RLS.
+Fix: Added gem_redemption_gems and gem_redemption_value columns to hbb_profiles; added rate inputs to ManageBusinessPage.jsx; added redemption checkbox and discount calculation to PaymentPage.jsx; added points_update_own RLS policy allowing a user to update their own balance. Also swapped usePayment.js's points fetch from .single() to .maybeSingle() to avoid a crash for first-time customers with zero gems.
+Commit: feat: add gem redemption rate fields to business profile
+Commit: feat: add gem points redemption at checkout
+
+### 25 Jul 2026 — Added order chat, found two blocking bugs
+Found while working on: In-App Order Chat
+What happened: Built real-time chat on OrderStatusPage.jsx using the existing messages table and RLS policies (already correctly scoped). 
+Hit two separate blockers during testing: 
+- messages table was never added to Supabase's Realtime publication, so new messages only appeared after a manual page reload, not live
+- A customer test account existed in auth.users but had no corresponding row in the app's users table, causing every message insert to fail with a foreign key violation (messages_sender_id_fkey). No trigger exists to auto-create users rows on signup 
+Fix: Ran ALTER PUBLICATION supabase_realtime ADD TABLE messages to enable live updates. Manually inserted the missing users row to unblock testing. Also added visible error handling in useOrderChat.js's sendMessage so future failures show a message instead of failing silently.
+Commit: feat: add real-time order chat
+Commit: fix: surface send message errors instead of failing silently
+
+### 26 Jul 2026 — Added owner analytics dashboard
+Found while working on: Owner Analytics Dashboard
+What happened: Built revenue-over-time, best-sellers, and orders-by-month charts using Recharts, plus a CSV export of completed orders. Needed test data seeded (5 completed test orders across different dates) since only 1 existed beforehand 
+Fix: Created useAnalytics.js to fetch and aggregate completed orders by date/product/month. Created AnalyticsPage.jsx with three charts and CSV export. Wired up the /analytics route in App.jsx and activated the existing "Your Analytics" placeholder button on DashboardPage.jsx.
+Commit: chore: add recharts dependency
+Commit: feat: add owner analytics dashboard
