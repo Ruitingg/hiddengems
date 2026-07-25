@@ -220,6 +220,33 @@ const ManageBusinessPage = () => {
                                 className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white w-full"
                             />
                         </div>
+
+                        <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Gem redemption — gems required</label>
+                        <input
+                            name="gem_redemption_gems"
+                            type="number"
+                            min="0"
+                            placeholder="e.g. 500"
+                            value={currentForm.gem_redemption_gems || ''}
+                            onChange={handleProfileChange}
+                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white w-full"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="text-xs text-gray-400 mb-1 block">Gem redemption — discount value ($)</label>
+                        <input
+                            name="gem_redemption_value"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="e.g. 2.00"
+                            value={currentForm.gem_redemption_value || ''}
+                            onChange={handleProfileChange}
+                            className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white w-full"
+                        />
+                    </div>
                         
                         {profileMsg && (
                             <p className={`text-sm ${profileMsg === 'Saved!' ? 'text-green-500' : 'text-red-400'}`}>
