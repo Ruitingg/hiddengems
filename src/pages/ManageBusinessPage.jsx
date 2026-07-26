@@ -208,6 +208,19 @@ const ManageBusinessPage = () => {
                                 className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white w-full"
                             />
                         </div>
+
+                        <div>
+                            <label className="text-xs text-gray-400 mb-1 block">PayNow number</label>
+                            <input
+                                name="paynow_number"
+                                type="text"
+                                placeholder="e.g. 91234567"
+                                value={currentForm.paynow_number || ''}
+                                onChange={handleProfileChange}
+                                className="border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d3748] outline-none focus:border-[#0e6b7a] bg-white w-full"
+                            />
+                        </div>
+                        
                         {profileMsg && (
                             <p className={`text-sm ${profileMsg === 'Saved!' ? 'text-green-500' : 'text-red-400'}`}>
                                 {profileMsg}

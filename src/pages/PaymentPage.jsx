@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { QRCodeSVG } from 'qrcode.react'
 import { usePayment } from '../hooks/usePayment'
 
 const PaymentPage = () => {
@@ -55,6 +56,10 @@ const PaymentPage = () => {
     }
 
     const amount = order.final_price ?? 0
+    const orderNumber = order.id.slice(0, 8)
+    const paynowNumber = order.hbb_profiles?.paynow_number
+    const qrValue = `PayNow to ${paynowNumber} for Order #${orderNumber}`
+
     return (
         <div className="min-h-screen bg-white">
 
@@ -85,8 +90,24 @@ const PaymentPage = () => {
                     </div>
                 </div>
 
+                {paynowNumber ? (
+                    <div className="bg-white border border-gray-100 rounded-2xl p-5 mb-6 flex flex-col items-center">
+                        <p className="text-sm font-semibold text-[#2d3748] mb-3">Scan to pay via PayNow</p>
+                        <div className="p-3 bg-white border border-gray-100 rounded-xl">
+                            <QRCodeSVG value={qrValue} size={180} />
+                        </div>
+                        <p className="text-xs text-gray-400 mt-3 text-center">
+                            PayNow to {paynowNumber}<br/>Order #{orderNumber}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="bg-amber-50 border border-amber-100 text-amber-700 text-sm px-4 py-3 rounded-xl mb-6 text-center">
+                        This seller hasn't set up PayNow yet.
+                    </div>
+                )}
+
                 <p className="text-xs text-gray-400 mb-4 text-center">
-                    🔒 Simulated payment for Milestone 2 — real Stripe checkout coming in Milestone 3.
+                    🔒 Simulated payment — confirm below once you've completed payment via PayNow.
                 </p>
 
                 {payError && (
