@@ -18,6 +18,7 @@ import ManageBusinessPage from './pages/ManageBusinessPage'
 import AnnouncementsPage from './pages/AnnouncementsPage'
 import FavouritesPage from './pages/FavouritesPage'
 import NotificationsPage from './pages/NotificationsPage'
+import AnalyticsPage from './pages/AnalyticsPage'
 
 function App() {
   return (
@@ -87,6 +88,11 @@ function App() {
           <Route path="/notifications" element={
             <ProtectedRoute>
               <NotificationsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/analytics" element={
+            <ProtectedRoute>
+              <AnalyticsPage />
             </ProtectedRoute>
           } />
 

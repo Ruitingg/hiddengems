@@ -67,13 +67,16 @@ const DashboardPage = () => {
                         <p className="text-sm text-gray-400 ml-9">Post updates, promos, and stories to your followers</p>
                     </button>
 
-                    <div className="bg-white rounded-2xl px-6 py-5 border border-dashed border-gray-200 shadow-sm">
+                    <button
+                        onClick={() => navigate('/analytics')}
+                        className="bg-white rounded-2xl px-6 py-5 border border-gray-100 shadow-sm text-left hover:shadow-md hover:-translate-y-0.5 transition cursor-pointer"
+                    >
                         <div className="flex items-center gap-3 mb-1">
                             <span className="text-2xl">📊</span>
                             <h2 className="font-bold text-[#2d3748]">Your Analytics</h2>
                         </div>
-                        <p className="text-sm text-gray-400 ml-9">Coming in Milestone 3</p>
-                    </div>
+                        <p className="text-sm text-gray-400 ml-9">Revenue, best sellers, and order trends</p>
+                    </button>
 
                     <button
                         onClick={() => navigate('/calendar')}
