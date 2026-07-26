@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { isWithinLeadTime } from '../utils/leadTime'
 
 export const useOrderForm = (hbbId) => {
     const [products, setProducts] = useState([])
@@ -38,10 +39,7 @@ export const useOrderForm = (hbbId) => {
 
     const checkLeadTime = (slotDate, product) => {
         const leadTimeDays = product.lead_time_days ?? businessProfile?.lead_time_days ?? 0
-        const today = new Date()
-        const slot = new Date(slotDate)
-        const daysUntilSlot = (slot - today) / (1000 * 60 * 60 * 24)
-        return daysUntilSlot >= leadTimeDays
+        return isWithinLeadTime(slotDate, leadTimeDays)
     }
 
     const createOrder = async ({ slotDate, slotTime, slotId, hbbId, productIds, pricingType, notes, customerId }) => {
