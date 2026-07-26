@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { usePayment } from '../hooks/usePayment'
+import { calculateGemRedemption } from '../utils/gemDiscount'
 
 const PaymentPage = () => {
     const { orderId } = useParams()
@@ -51,11 +52,9 @@ const PaymentPage = () => {
     const valuePerUnit = order.hbb_profiles?.gem_redemption_value
     const redemptionAvailable = gemsPerUnit > 0 && valuePerUnit > 0
 
-    const affordableUnits = redemptionAvailable ? Math.floor(gemBalance / gemsPerUnit) : 0
-    const maxDiscount = affordableUnits * (valuePerUnit || 0)
-    const cappedDiscount = Math.min(maxDiscount, rawAmount)
-    const cappedUnits = valuePerUnit > 0 ? Math.floor(cappedDiscount / valuePerUnit) : 0
-    const gemsToRedeem = cappedUnits * (gemsPerUnit || 0)
+    const { gemsToRedeem, discount: cappedDiscount } = calculateGemRedemption({
+        gemBalance, gemsPerUnit, valuePerUnit, rawAmount
+    })
 
     const discount = redeemGems ? cappedDiscount : 0
     const amount = Math.max(rawAmount - discount, 0)
