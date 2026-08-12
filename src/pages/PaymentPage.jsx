@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { usePayment } from '../hooks/usePayment'
+import { buildPayNowQRPayload } from '../lib/paynowQR'
 
 const PaymentPage = () => {
     const { orderId } = useParams()
@@ -59,7 +60,14 @@ const PaymentPage = () => {
 
     const discount = redeemGems ? cappedDiscount : 0
     const amount = Math.max(rawAmount - discount, 0)
-    const qrValue = `PayNow to ${paynowNumber} for Order #${orderNumber}`
+    const qrValue = paynowNumber
+        ? buildPayNowQRPayload({
+            paynowNumber,
+            amount,
+            reference: `Order ${orderNumber}`,
+            merchantName: order.hbb_profiles?.name,
+        })
+        : ''
 
     const handlePay = async () => {
         setPaying(true)
@@ -149,7 +157,7 @@ const PaymentPage = () => {
                 )}
 
                 <p className="text-xs text-gray-400 mb-4 text-center">
-                    🔒 Simulated payment — confirm below once you've completed payment via PayNow.
+                    Simulated payment — confirm below once you've completed payment via PayNow.
                 </p>
 
                 {payError && (
