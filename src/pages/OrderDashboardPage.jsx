@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useOrderDashboard } from '../hooks/useOrderDashboard'
 import { supabase } from '../lib/supabaseClient'
+import OrderChat from '../components/OrderChat'
 
 const TABS = [
     { key: 'quotes', label: 'Quote Requests' },
@@ -16,6 +17,16 @@ const OrderDashboardPage = () => {
     const [quoteInputs, setQuoteInputs] = useState({})
     const [sendingId, setSendingId] = useState(null)
     const [completingId, setCompletingId] = useState(null)
+    const [currentUserId, setCurrentUserId] = useState(null)
+    const [openChatOrderId, setOpenChatOrderId] = useState(null)
+
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            setCurrentUserId(session?.user?.id ?? null)
+        }
+        getUser()
+    }, [])
 
     const handleQuoteChange = (orderId, value) => {
         setQuoteInputs((prev) => ({ ...prev, [orderId]: value }))
@@ -93,7 +104,7 @@ const OrderDashboardPage = () => {
                     onClick={() => navigate('/dashboard')}
                     className="flex items-center gap-1 text-gray-400 hover:text-[#0e6b7a] mb-4 text-sm transition"
                 >
-                    ← Back to Dashboard
+                    Back to Dashboard
                 </button>
                 <h1 className="text-[#2d3748] text-xl font-bold"
                     style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
@@ -139,7 +150,20 @@ const OrderDashboardPage = () => {
                                 </div>
 
                                 {order.order_notes && (
-                                    <p className="text-xs text-gray-500 mb-2">📝 {order.order_notes}</p>
+                                    <p className="text-xs text-gray-500 mb-2">{order.order_notes}</p>
+                                )}
+
+                                <button
+                                    onClick={() => setOpenChatOrderId(openChatOrderId === order.id ? null : order.id)}
+                                    className="text-xs font-medium text-[#0e6b7a] hover:underline mb-2"
+                                >
+                                    {openChatOrderId === order.id ? 'Hide chat' : 'Message customer'}
+                                </button>
+
+                                {openChatOrderId === order.id && (
+                                    <div className="mb-3">
+                                        <OrderChat orderId={order.id} currentUserId={currentUserId} />
+                                    </div>
                                 )}
 
                                 {activeTab === 'quotes' && (
